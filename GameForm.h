@@ -222,10 +222,10 @@ namespace MisterRoboto {
          gameState = GameState::ROAMING;
          redraw = Redraw::BACKGROUND;
          facing = FaceDir::RIGHT;
-         //map->placePickUp(new PickUp(), 12, 5);
-         //map->placePickUp(new PickUp(), 13, 5);
-         //map->placePickUp(new PickUp(), 14, 5);
-         //map->placePickUp(new PickUp(), 15, 5);
+         /*map->placePickUp(new PickUp(), 12, 5);
+         map->placePickUp(new PickUp(), 13, 5);
+         map->placePickUp(new PickUp(), 14, 5);
+         map->placePickUp(new PickUp(), 15, 5);*/
       }
 
    /*void LoadWorld(int saveNum)
