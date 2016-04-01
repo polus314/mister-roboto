@@ -20,8 +20,8 @@ class Battle
 {
 public:
    enum class State { CONTINUE, OPP_CAUGHT, OPP_FAINTED, USER_FAINTED };
-   Battle(Panel^, Robot*, Robot*);
-   void DrawBattleScene();
+   Battle();
+   Battle(Robot*, Robot*);
    void UseAbility(Ability* a, bool isUser);
    State DoTurnEvents(Ability*);
    State DoTurnEvents(PickUp*);
@@ -29,15 +29,10 @@ public:
 
 private:
    Robot *userBot, *otherBot;
-   gcroot<Panel^> panel;
-   gcroot<Graphics^> g;
-   gcroot<Brush^> backBrush;
-   void DrawHealthBars();
-   Brush^ getBrushColor(float health);
    bool IsSuperEffective(Ability::Type, Ability::Type);
    bool ThrowPokeBall(PickUp*);
    State CheckForFainting();
-   String^ StsToStr(Robot::Status);
+   string StsToStr(Robot::Status);
    void DoPoisonDamage();
 };
 

@@ -15,8 +15,6 @@
 Robot::Robot()
 {
    id = Robot::ID(26);
-   sprite = gcnew Bitmap("bluerobot.bmp");
-   sprite->MakeTransparent();
    name = "Mewtwo";
    moves[0] = new Ability("Tackle", Ability::Effect::DAMAGE, 30, Ability::Effect::NONE, 0, Ability::Type::STRONG);
    moves[1] = new Ability("Electrocute", Ability::Effect::DAMAGE, 25, Ability::Effect::STS_PRLZ, 50, Ability::Type::TECH);
@@ -35,10 +33,8 @@ Robot::Robot(ID _id)
    id = _id;
    health = maxHealth;
    exp = 450;
-   level = 4;
+   level = 5;
    status = Status::HEALTHY;
-   sprite = gcnew Bitmap("blackrobot.bmp");
-   sprite->MakeTransparent();
    moves[0] = new Ability("Tackle", Ability::Effect::DAMAGE, 10, Ability::Effect::NONE, 0, Ability::Type::STRONG);
    moves[1] = new Ability("Electrocute", Ability::Effect::DAMAGE, 20, Ability::Effect::STS_PRLZ, 50, Ability::Type::TECH);
    moves[2] = new Ability("Focus Energy", Ability::Effect::BUFF_ATK, 50, Ability::Effect::NONE, 0, Ability::Type::STRONG);
@@ -58,7 +54,7 @@ void Robot::ReadInData(int idNo)
    for(int i = 0; i < idNo; i++)
       getline(ifs, line);
    getline(ifs, attribute, ',');
-   name = gcnew String(attribute.c_str());
+   name = string(attribute.c_str());
 
    getline(ifs, attribute, ',');
    type1 = Ability::TypeFromStr(attribute);

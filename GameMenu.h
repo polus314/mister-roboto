@@ -4,10 +4,6 @@
 // Purpose: This file defines an abstract GameMenu class. This class defines
 //          several methods that must be implemented by all child Menu classes.
 //          All menus that appear in the game are children of this class.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef GAMEMENU_H
@@ -22,7 +18,7 @@ class GameMenu
 {
 public:
    GameMenu();
-   GameMenu(Panel^ _panel);
+   /*GameMenu(Panel^ _panel);*/
    virtual void Draw() = 0;
    virtual void NextOption() = 0;
    virtual void PreviousOption() = 0;
@@ -30,14 +26,14 @@ public:
    virtual GameMenu* GetParentMenu() = 0;
 
 protected:
-   gcroot<Panel^> panel;
+   /*gcroot<Panel^> panel;
    gcroot<Graphics^> g;
    gcroot<Brush^> regBrush, selBrush, backBrush;
    gcroot<Pen^> pen;
    gcroot<Font^> headerFont, otherFont;
    GMenuItem options[10];
    int count, selIndex;
-   GameMenu *child, *parent;
+   GameMenu *child, *parent;*/
 };
 
 #endif

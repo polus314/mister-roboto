@@ -11,7 +11,7 @@ public:
    enum class Direction { LEFT, RIGHT, UP, DOWN };
    GameController();
 
-   bool LoadWorld(int num) const;
+   bool LoadWorld(int num);
    bool SaveWorld(int num) const;
    const Character& GetMainCharacter() const;
    void StartWildBattle(Robot& enemy);

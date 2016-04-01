@@ -11,15 +11,9 @@
 #include "stdafx.h"
 #include "Character.h"
 
-Character::Character(Panel^ _panel, Bitmap^ _sheet): xCoord(5), yCoord(5)
+Character::Character(): xCoord(5), yCoord(5)
 {
    dialogue = "Hi, my name is Slim Shady!";
-   direction = DIRECTION::STAND_D;
-   sheet = _sheet;
-   allSprites = new Sprite(sheet);
-   setSprite();
-   panel = _panel;
-   g = panel->CreateGraphics();
    botCount = itemCount = 0;
 
    for(int i = 0; i < 10; i++)
@@ -30,17 +24,11 @@ Character::Character(Panel^ _panel, Bitmap^ _sheet): xCoord(5), yCoord(5)
       team[i] = NULL;
 }
 
-Character::Character(Panel^ _panel, Bitmap^ _sheet, int x, int y, bool _playable, string info, int ic, int bc)
+Character::Character(int x, int y, bool _playable, string info, int ic, int bc)
  : xCoord(x), yCoord(y)
 {
    dialogue = "Hi, my name is Slim Shady!";
-   direction = DIRECTION::STAND_D;
    playable = _playable;
-   sheet = _sheet;
-   allSprites = new Sprite(sheet);
-   setSprite();
-   panel = _panel;
-   g = panel->CreateGraphics();
    botCount = bc;
    itemCount = ic;
 
@@ -70,17 +58,6 @@ Character::Character(Panel^ _panel, Bitmap^ _sheet, int x, int y, bool _playable
    for(int m = bc; m < 6; m++)
       team[m] = NULL;
 }
-void Character::Draw()
-{
-   setSprite();
-   g->DrawImageUnscaled(sprite, 250, 250);
-}
-
-void Character::Draw(float x, float y)
-{
-   setSprite();
-   g->DrawImage(sprite, Drawing::Rectangle(int(x * 50), int(y * 50), 50, 50));
-}
 
 Robot* Character::getRobot(int index)
 {
@@ -93,50 +70,6 @@ Robot* Character::getRobot(int index)
 void Character::AcquireItem(PickUp* item)
 {
    inventory[itemCount++] = item;
-}
-
-
-void Character::setSprite()
-{
-   switch(direction)
-   {
-      case DIRECTION::STAND_D :
-         sprite = allSprites->standD;
-         break;
-      case DIRECTION::WALK_D_L :
-         sprite = allSprites->walkDL;
-         break;
-      case DIRECTION::WALK_D_R :
-         sprite = allSprites->walkDR;
-         break;
-      case DIRECTION::WALK_L_L :
-         sprite = allSprites->walkLL;
-         break;
-      case DIRECTION::WALK_L_R :
-         sprite = allSprites->walkLR;
-         break;
-      case DIRECTION::STAND_L :
-         sprite = allSprites->standL;
-         break;
-      case DIRECTION::WALK_R_L :
-         sprite = allSprites->walkRL;
-         break;
-      case DIRECTION::WALK_R_R :
-         sprite = allSprites->walkRR;
-         break;
-      case DIRECTION::STAND_R :
-         sprite = allSprites->standR;
-         break;
-      case DIRECTION::WALK_U_L :
-         sprite = allSprites->walkUL;
-         break;
-      case DIRECTION::WALK_U_R :
-         sprite = allSprites->walkUR;
-         break;
-      case DIRECTION::STAND_U :
-         sprite = allSprites->standU;
-         break;
-   }
 }
 
 PickUp* Character::GetItem(int index)

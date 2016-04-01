@@ -43,8 +43,8 @@ public:
    // Constructors
    //--------------------------------------------------------------------------
    Ability();
-   Ability(String^, int);
-   Ability(String^, Effect, int, Effect, int, Ability::Type);
+   Ability(string, int);
+   Ability(string, Effect, int, Effect, int, Ability::Type);
 
    //--------------------------------------------------------------------------
    // Used to load data and update this Ability from saved data
@@ -54,7 +54,7 @@ public:
    //--------------------------------------------------------------------------
    // Getters
    //--------------------------------------------------------------------------
-   String^ getName() { return name; }
+   string getName() { return name; }
    int getStrength1() { return strength1; }
    int getStrength2() { return strength2; }
    Type getType() { return type; }
@@ -81,7 +81,7 @@ private:
    //--------------------------------------------------------------------------
    // Name of the ability
    //--------------------------------------------------------------------------
-   gcroot<String^> name;
+   string name;
    
    //--------------------------------------------------------------------------
    // Indicates the strength of the effect for effect1 and effect2, 

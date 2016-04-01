@@ -14,16 +14,11 @@
 PickUp::PickUp()
 {
    type = PickUp::ItemType::POKEBALL;
-   xCoord = 23;
-   yCoord = 34;
-   image = gcnew Bitmap("crate.bmp");
 }
 
 string PickUp::GetSaveData()
 {
    string info;
-   info.append(SaveIntToStr(xCoord));
-   info.append(SaveIntToStr(yCoord));
    info.append(ItemTypeToSaveString(type));
    return info;
 }
@@ -51,8 +46,6 @@ PickUp::ItemType PickUp::SaveStringToItemType(string typeStr)
 
 void PickUp::LoadFromSaveData(string info)
 {
-   xCoord = stoi(info.substr(0, 4));
-   yCoord = stoi(info.substr(4, 4));
-   type = SaveStringToItemType(info.substr(8, 12));
+   type = SaveStringToItemType(info);
 }
 

@@ -18,7 +18,7 @@
 class AbilityMenu : public GameMenu
 {
 public:
-   AbilityMenu::AbilityMenu(Panel^, Robot*, GameMenu*); 
+   AbilityMenu::AbilityMenu(/*Panel^,*/ Robot*, GameMenu*); 
 
    void Draw();
    void NextOption();

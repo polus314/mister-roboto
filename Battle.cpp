@@ -13,43 +13,40 @@
 
 #define DEBUGGING true
 
-Battle::Battle(Panel^ _panel, Robot* uB, Robot* oB) :
-   panel(_panel), userBot(uB), otherBot(oB)
+Battle::Battle( Robot* uB, Robot* oB) :
+   userBot(uB), otherBot(oB)
 { 
-   g = panel->CreateGraphics();
-   backBrush = gcnew SolidBrush(Color::Gray);
 }
 
-void Battle::DrawBattleScene()
+Battle::Battle() :
+   userBot(NULL), otherBot(NULL)
 {
-   g->DrawImage(otherBot->getSprite(), 350, 50, 150, 150);
-   g->DrawImage(userBot->getSprite(), 25, 300, 150, 150);
-   DrawHealthBars();
 }
 
-void Battle::DrawHealthBars()
-{
-   float otherHealth = otherBot->GetPctHealth(), userHealth = userBot->GetPctHealth();
-   Brush ^HBbrush, ^wordBrush = gcnew SolidBrush(Color::Black);
-   Font^ font = gcnew Font("Arial", 12);
-   HBbrush = getBrushColor(otherHealth);
 
-   g->DrawString(otherBot->getName(), font, wordBrush, 25, 0);
-   g->DrawRectangle(gcnew Pen(Color::Black), 25, 27, 150, 25);
-   g->FillRectangle(HBbrush, 26, 28, int(otherHealth * 149), 24);
-   g->DrawString("Level: " + otherBot->GetLevel(), font, wordBrush, 25, 12);
-   g->DrawString(StsToStr(otherBot->GetStatus()), font, wordBrush, 100, 12);
+//void Battle::DrawHealthBars()
+//{
+//   float otherHealth = otherBot->GetPctHealth(), userHealth = userBot->GetPctHealth();
+//   Brush ^HBbrush, ^wordBrush = gcnew SolidBrush(Color::Black);
+//   Font^ font = gcnew Font("Arial", 12);
+//   HBbrush = getBrushColor(otherHealth);
+//
+//   g->DrawString(otherBot->getName(), font, wordBrush, 25, 0);
+//   g->DrawRectangle(gcnew Pen(Color::Black), 25, 27, 150, 25);
+//   g->FillRectangle(HBbrush, 26, 28, int(otherHealth * 149), 24);
+//   g->DrawString("Level: " + otherBot->GetLevel(), font, wordBrush, 25, 12);
+//   g->DrawString(StsToStr(otherBot->GetStatus()), font, wordBrush, 100, 12);
+//
+//   HBbrush = getBrushColor(userHealth);
+//
+//   g->DrawString(userBot->getName(), font, wordBrush, 325, 325);
+//   g->DrawRectangle(gcnew Pen(Color::Black), 325, 365, 150, 25);
+//   g->FillRectangle(HBbrush, 326, 366, int(userHealth * 149), 24);
+//   g->DrawString("Level: " + userBot->GetLevel(), font, wordBrush, 325, 349);
+//   g->DrawString(StsToStr(userBot->GetStatus()), font, wordBrush, 400, 349);
+//}
 
-   HBbrush = getBrushColor(userHealth);
-
-   g->DrawString(userBot->getName(), font, wordBrush, 325, 325);
-   g->DrawRectangle(gcnew Pen(Color::Black), 325, 365, 150, 25);
-   g->FillRectangle(HBbrush, 326, 366, int(userHealth * 149), 24);
-   g->DrawString("Level: " + userBot->GetLevel(), font, wordBrush, 325, 349);
-   g->DrawString(StsToStr(userBot->GetStatus()), font, wordBrush, 400, 349);
-}
-
-String^ Battle::StsToStr(Robot::Status status)
+string Battle::StsToStr(Robot::Status status)
 {
    switch(status)
    {
@@ -65,18 +62,6 @@ String^ Battle::StsToStr(Robot::Status status)
    return "";
 
 }
-
-
-Brush^ Battle::getBrushColor(float health)
-{
-   if(health <= 0.25)
-      return gcnew SolidBrush(Color::Red);
-   else if (health <= 0.5)
-      return gcnew SolidBrush(Color::Yellow);
-   else
-      return gcnew SolidBrush(Color::Green);
-}
-
 
 void Battle::UseAbility(Ability* a, bool isUser)
 {
@@ -210,6 +195,8 @@ Battle::State Battle::DoTurnEvents(PickUp* item)
 
 bool Battle::ThrowPokeBall(PickUp* item)
 {
+   // TODO - if(masterBall) 
+   //           return true; etc.
    if(rand() % 100 > 50)
       return true;
    else

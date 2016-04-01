@@ -21,7 +21,7 @@ Ability::Ability()
 }
 
 
-Ability::Ability(String^ _name, int str)
+Ability::Ability(string _name, int str)
 {
    name = _name;
    type = Type::FAST;
@@ -30,7 +30,7 @@ Ability::Ability(String^ _name, int str)
    strength1 = str;
 }
 
-Ability::Ability(String^ _name, Effect eff1, int str1, Effect eff2, int str2, Ability::Type _type)
+Ability::Ability(string _name, Effect eff1, int str1, Effect eff2, int str2, Ability::Type _type)
 {
    name = _name;
    type = _type;

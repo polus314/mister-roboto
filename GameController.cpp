@@ -1,13 +1,18 @@
 #include "stdafx.h"
 #include "GameController.h"
 
+GameController::GameController()
+{
+}
+
+
 bool GameController::LoadWorld(int num)
 {
    string fileName = "SaveFile";
       fileName.append(to_string(num));
       fileName.append(".txt");
       ifstream inFile(fileName);
-      george = Character(panel1, gcnew Bitmap("redspritesheet2.bmp"));
+      //george = Character(panel1, gcnew Bitmap("redspritesheet2.bmp")); TODO fix this
 
       int ic, bc, charsNeeded;
       char * buffer = new char[128];
@@ -27,15 +32,9 @@ bool GameController::LoadWorld(int num)
       george.LoadFromSaveData(attribute);
       
 
-         map = GameMap(panel1);
-         //cpMenu = pauseMenu = new StartMenu(panel1, george);
-         //cbMenu = battleMenu = new BattleMenu(panel1, george);
-         //command = NULL;
-         //
-         //gameState = GameState::ROAMING;
-         //redraw = Redraw::BACKGROUND;
-         //facing = Direction::RIGHT;
+         //map = GameMap(panel1);   TODO fix this
       delete buffer;
+      return true;
 }
 
 const Character& GameController::GetMainCharacter() const

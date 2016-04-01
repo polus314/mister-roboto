@@ -36,8 +36,7 @@ public:
    // Constructors
    //--------------------------------------------------------------------------
    Character();
-   Character(Panel^ _panel, Bitmap^ _sheet);
-   Character(Panel^ _panel, Bitmap^ _sheet, int x, int y, bool playable, string info, int ic, int bc);
+   Character(int x, int y, bool playable, string info, int ic, int bc);
 
    //--------------------------------------------------------------------------
    // Used to load the character from the save file
@@ -45,19 +44,9 @@ public:
    void LoadFromSaveData(string info);
 
    //--------------------------------------------------------------------------
-   // Draws the character on its panel using character's xCoord and yCoord
-   //--------------------------------------------------------------------------
-   void Draw();
-
-   //--------------------------------------------------------------------------
-   // Draws the character on its panel using given xCoord and yCoord
-   //--------------------------------------------------------------------------
-   void Draw(float,float);
-
-   //--------------------------------------------------------------------------
    // Getters
    //--------------------------------------------------------------------------
-   String^ GetDialogue() { return dialogue; }
+   string GetDialogue() { return dialogue; }
    int getX() { return xCoord; }
    int getY() { return yCoord; }
    Robot* getRobot(int);
@@ -74,7 +63,7 @@ public:
    //--------------------------------------------------------------------------
    // Set the direction the character is facing
    //--------------------------------------------------------------------------
-   void setDirection(DIRECTION d) { direction = d; }
+// void setDirection(DIRECTION d) { direction = d; }
 
    //--------------------------------------------------------------------------
    // Adds the given item to the character's inventory
@@ -108,18 +97,9 @@ private:
    int xCoord, yCoord, itemCount, botCount;
    PickUp* inventory[10];   
    Robot* team[6];
-   DIRECTION direction;
-   Sprite* allSprites;
-   gcroot<String^> dialogue;
-   gcroot<Bitmap^> sprite, sheet;
-   gcroot<Panel^> panel;
-   gcroot<Graphics^> g;
-
-   //--------------------------------------------------------------------------
-   // Assigns the correct bitmap to be the sprite for this character, depending
-   // on what direction the character is facing
-   //--------------------------------------------------------------------------
-   void setSprite();  
+   //DIRECTION direction;
+   //Sprite* allSprites;
+   string dialogue; 
 };
 
 

@@ -2,5 +2,6 @@
 *.suo
 *.vcxproj
 *.vcxproj.filters
+*.dll
 Debug/*
 ipch/*

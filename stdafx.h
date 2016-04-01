@@ -9,8 +9,6 @@
 #include <windows.h>
 #include <fstream>
 #include "MyUtil.h"
-using namespace System;
-using namespace System::Windows;
-using namespace System::Drawing;
-using namespace System::Windows::Forms;
+#include <cassert>
+#include <SFML/Graphics.hpp>
 using namespace std;

@@ -11,12 +11,12 @@
 #include "stdafx.h"
 #include "AbilityMenu.h"
 
-AbilityMenu::AbilityMenu(Panel^ _panel, Robot* ub, GameMenu* p)
+AbilityMenu::AbilityMenu(/*Panel^ _panel,*/ Robot* ub, GameMenu* p)
 {
-   panel = _panel;
+  /* panel = _panel;*/
    userBot = ub;
    parent = p;
-   g = panel->CreateGraphics();
+   /*g = panel->CreateGraphics();*/
    selIndex = 0;
    for(int i = 0; i < 4; i++)
    {
