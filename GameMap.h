@@ -26,7 +26,7 @@ public:
    //--------------------------------------------------------------------------
    // Returns true if space cannot be walked through
    //--------------------------------------------------------------------------
-   bool spaceIsSolid(int x, int y) { return squares[x][y]->isSolid(); }
+   bool spaceIsSolid(int x, int y);
 
    //--------------------------------------------------------------------------
    // Returns true if random encounters can happen on this space

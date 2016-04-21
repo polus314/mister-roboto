@@ -4,10 +4,6 @@
 // Purpose: This file defines a MenuCommand struct. A menu command is used to
 //          determine what the next step should be when transitioning out of
 //          one menu. Only one of the three pointers should be not NULL.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/29/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef MENUCOMMAND_H
@@ -22,7 +18,7 @@ class PickUp;
 
 struct MenuCommand
 {
-   enum class Function { SAVE, LOAD, EXIT_MENU, EXIT_GAME, NEW_GAME };
+   enum class Function { SAVE, LOAD, EXIT_MENU, EXIT_TO_MM, EXIT_GAME, NEW_GAME };
 
    GameMenu *nextMenu;
    Ability *ability;

@@ -2,24 +2,31 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file implements the methods declared in GMainMenu.h
-//
-// Created: 2/12/2016
-//
-// Changed: 2/12/2016 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
 #include "GMainMenu.h"
 
-GMainMenu::GMainMenu(Panel^ _panel)
+GMainMenu::GMainMenu(RenderWindow* w, float _x, float _y)
+   : GameMenu(w, _x, _y)
 {
-   panel = _panel;
-   g = panel->CreateGraphics();
-   
-   options[0] = GMenuItem("New Game");
-   options[1] = GMenuItem("Load Game");
-   options[2] = GMenuItem("Controls");
-   options[3] = GMenuItem("Quit");
+   count = selIndex = 0;
+   bgRects[0] = RectangleShape(Vector2f(MR::WIN_WIDTH, MR::WIN_HEIGHT));  
+   bgRects[0].setPosition(_x, _y);
+   bgRects[0].setFillColor(Color::Blue);
+   title = Text(String("Pokemon!"), font, 70);
+   title.setPosition(50.0f, 50.0f);
+   title.setColor(Color::Yellow);
+   options[count++] = GMenuItem(String("New Game"), &font, 30);
+   options[count++] = GMenuItem(String("Load Game"), &font, 30);
+   options[count++] = GMenuItem(String("Controls"), &font, 30);
+   options[count++] = GMenuItem(String("Quit"), &font, 30);
+
+   for(int i = 0; i < count; i++)
+   {
+      options[i].setPosition(_x + 100.0f, _y + float(200 + i * 50));
+   }
+   options[selIndex].select();
 }
 
 
@@ -41,22 +48,29 @@ void GMainMenu::PreviousOption()
 
 void GMainMenu::Draw()
 {
-   g->DrawString("Mister Roboto", otherFont, regBrush, 50, 50);
-   for(int i = 0; i < 4; i++) 
-      g->DrawString(options[i].getText(), otherFont, regBrush, 100, 100 + 50 * i);
-   DrawArrow();
+   win->draw(bgRects[0]);
+   win->draw(title);
+   for(int i = 0; i < 4; i++)
+   {
+      win->draw(*options[i].getText());
+   }
+
+   //DrawArrow();
 }
 
 void GMainMenu::DrawArrow()
 {
-   g->FillRectangle(regBrush, 50, 103 + 50 * selIndex, 10, 3);
+   float x = 50.0f;
+   float y = float(103 + 50 * selIndex);
+   arrow.setPosition(x, y);
+   win->draw(arrow);
 }
 
 
 MenuCommand* GMainMenu::EnterSelection()
 {
    if(selIndex == 0)
-      return new MenuCommand(MenuCommand::Function::NEW_GAME);
+      return new MenuCommand(MenuCommand::Function::NEW_GAME); // TODO - change back to NEW_GAME
    else if(selIndex == 1)
       return new MenuCommand(MenuCommand::Function::LOAD);
    else if (selIndex == 2)

@@ -2,10 +2,6 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file implements the methods declared in Character.h
-//
-// Created: 2/6/2016
-//
-// Changed: 3/7/2016 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
@@ -24,39 +20,19 @@ Character::Character(): xCoord(5), yCoord(5)
       team[i] = NULL;
 }
 
-Character::Character(int x, int y, bool _playable, string info, int ic, int bc)
+Character::Character(int x, int y)
  : xCoord(x), yCoord(y)
 {
+   playable = true;
    dialogue = "Hi, my name is Slim Shady!";
-   playable = _playable;
-   botCount = bc;
-   itemCount = ic;
+   botCount = itemCount = 0;
 
-   string itemInfo;
-   for(int i = 0; i < ic; i++)
-   {
-      itemInfo = info.substr(i * 9, 9);
-      if(itemInfo == "Pokeball ")
-         inventory[i] = new PickUp();
-   }
+   for(int i = 0; i < 10; i++)
+      inventory[i] = NULL;
 
-   for(int j = ic; j < 10; j++)
-      inventory[j] = NULL;
-   int offset = ic * 9;
-   string botInfo; 
-   for(int k = 0; k < bc; k++)
-   {
-      botInfo = info.substr(offset + k * 7, 7);
-      if(botInfo == "Chucky ")
-         team[k] = new Robot(Robot::ID::ALPHA);
-      else
-         team[k] = new Robot(Robot::ID::BRAVO);
-      
-   }
-
-   //team[botCount++] = new Robot(Robot::ID::ALPHA);
-   for(int m = bc; m < 6; m++)
-      team[m] = NULL;
+   team[botCount++] = new Robot(Robot::ID::ALPHA);
+   for(int i = 1; i < 6; i++)
+      team[i] = NULL;
 }
 
 Robot* Character::getRobot(int index)

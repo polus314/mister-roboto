@@ -2,39 +2,36 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file implements the methods declared in StartMenu.h
-//
-// Created: 2/6/2016
-//
-// Changed: 2/15/2016 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
 #include "StartMenu.h"
 
-StartMenu::StartMenu(Panel^ _panel, Character * george)
+StartMenu::StartMenu(RenderWindow* w, Character* prot, float _x, float _y)
+   : GameMenu(w, _x, _y)
 {
-   panel = _panel;
-   g = panel->CreateGraphics();
-   parent = NULL;
-   regBrush = gcnew SolidBrush(Color::Black);
-   selBrush = gcnew SolidBrush(Color::Red);
-   backBrush = gcnew SolidBrush(Color::White);
-   pen = gcnew Pen(Color::Black);
-   headerFont = gcnew Font("Arial", 12, FontStyle::Bold);
-   otherFont = gcnew Font("Arial", 12, FontStyle::Regular);
-   
-   trainer = george;
-
+   bgRects[0] = RectangleShape(Vector2f(MR::WIN_WIDTH / 4 - 10.0f, MR::WIN_HEIGHT - 10.0f));
+   bgRects[1] = RectangleShape(Vector2f(MR::WIN_WIDTH / 4 - 5.0f, MR::WIN_HEIGHT - 5.0f));
+   bgRects[2] = RectangleShape(Vector2f(MR::WIN_WIDTH / 4, MR::WIN_HEIGHT));
+   trainer = prot;
    count = 0;
-   options[count++] = GMenuItem("Robodex", false);
-   options[count++] = GMenuItem("Team", false);
-   options[count++] = GMenuItem("Items", false);
-   options[count++] = GMenuItem("Save", false);
-   options[count++] = GMenuItem("Quit to Main Menu");
+   options[count++] = GMenuItem(String("Robodex"), &font);
+   options[count++] = GMenuItem(String("Team"), &font);
+   options[count++] = GMenuItem(String("Items"), &font);
+   options[count++] = GMenuItem(String("Save"), &font);
+   options[count++] = GMenuItem(String("Quit to\nMain Menu"), &font);
 
+   for(int i = 0; i < count; i++)
+      options[i].setPosition(_x + 10.0f, _y + i * 50);
 
    selIndex = 0;
    options[selIndex].select();
+   bgRects[0].setPosition(_x + 5.0f, _y + 5.0f);
+   bgRects[1].setPosition(_x + 2.5f, _y + 2.5f);
+   bgRects[2].setPosition(_x, _y);
+
+   bgRects[1].setFillColor(Color::Black);
+   options[0].select();
 }
 
 void StartMenu::NextOption()
@@ -59,13 +56,13 @@ MenuCommand* StartMenu::EnterSelection()
    {
       case 0: return new MenuCommand(); // Robodex
          break;
-      case 1: return new MenuCommand(new TeamMenu(panel, this, trainer));
+      case 1: return new MenuCommand(new TeamMenu(win, trainer));
          break;
-      case 2: return new MenuCommand(new ItemMenu(panel, this, trainer));
+      case 2: return new MenuCommand(new ItemMenu(win, trainer));
          break;
       case 3: return new MenuCommand(MenuCommand::Function::SAVE); // Save option
          break;
-      case 4: return new MenuCommand(MenuCommand::Function::EXIT_GAME); // Quit to Main Menu
+      case 4: return new MenuCommand(MenuCommand::Function::EXIT_TO_MM); // Quit to Main Menu
          break;
    }
    return NULL; //change this line later
@@ -74,24 +71,19 @@ MenuCommand* StartMenu::EnterSelection()
 
 void StartMenu::Draw()
 {
-   g->DrawRectangle(pen, 400, 0, 99, 500);
-   g->DrawRectangle(pen, 401, 1, 97, 498);
-   g->FillRectangle(backBrush, 402, 2, 95, 496);
+   win->draw(bgRects[2]);
+   win->draw(bgRects[1]);
+   win->draw(bgRects[0]);
    for(int i = 0; i < count; i++)
-   {
-      if(options[i].isHeader())
-         g->DrawString(options[i].getText(), headerFont, regBrush, float(423), float(i * 50));
-      //else if (options[i].isSelected())
-      //   g->DrawString(options[i].getText(), otherFont, selBrush, float(400), float(i * 50));
-      else
-         g->DrawString(options[i].getText(), otherFont, regBrush, float(423), float(i * 50));
-   }
-   DrawArrow();
+      win->draw(*options[i].getText());
+
+   //DrawArrow();
 }
 
 void StartMenu::DrawArrow()
 {
-   int xPos = 406;
-   int yPos = 50 * selIndex + 7;
-   g->FillRectangle(regBrush, xPos, yPos, 15, 5);
+   float xPos = 370.0f;
+   float yPos = float(50 * selIndex + 7);
+   arrow.setPosition(xPos, yPos);
+   win->draw(arrow);
 }

@@ -7,20 +7,20 @@
 #include "stdafx.h"
 #include "Space.h"
 
-Space::Space(SpaceType _type) : pickUp(NULL)
+Space::Space(SpaceType t) : pickUp(NULL)
 {
-   type = _type;
+   type = t;
    switch(type)
    {
-      case DIRT:
+      case SpaceType::DIRT:
          dangerous = false;
          solid = false;
          break;
-      case GRASS:
+      case SpaceType::GRASS:
          dangerous = true;
          solid = false;
          break;
-      case GRAVEL:
+      case SpaceType::GRAVEL:
          solid = true;
          dangerous = false;
          break;

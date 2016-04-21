@@ -18,13 +18,12 @@
 class AbilityMenu : public GameMenu
 {
 public:
-   AbilityMenu::AbilityMenu(/*Panel^,*/ Robot*, GameMenu*); 
+   AbilityMenu::AbilityMenu(RenderWindow* w, Robot*, float _x = 0.0f, float _y = MR::WIN_HEIGHT * 4 / 5); 
 
    void Draw();
    void NextOption();
    void PreviousOption();
    MenuCommand* EnterSelection();
-   GameMenu* GetParentMenu() { return parent; }
    void SetUserBot(Robot* ur) { userBot = ur; }
 
 private:

@@ -79,7 +79,7 @@ public:
    // Reduces current health proportionally to the given amount, minimum
    // being 0
    //--------------------------------------------------------------------------
-   void takeDamage(int);
+   void takeDamage(int atkStrength);
 
    //--------------------------------------------------------------------------
    // Changes status according to the given effect

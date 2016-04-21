@@ -17,23 +17,24 @@
 class GameMenu
 {
 public:
+   enum class Layout { L_TO_R, TOP_TO_BOT };
    GameMenu();
-   /*GameMenu(Panel^ _panel);*/
+   GameMenu(RenderWindow* w, float _x, float _y);
    virtual void Draw() = 0;
    virtual void NextOption() = 0;
    virtual void PreviousOption() = 0;
    virtual MenuCommand* EnterSelection() = 0;
-   virtual GameMenu* GetParentMenu() = 0;
+   Layout getLayout() { return layout; }
 
 protected:
-   /*gcroot<Panel^> panel;
-   gcroot<Graphics^> g;
-   gcroot<Brush^> regBrush, selBrush, backBrush;
-   gcroot<Pen^> pen;
-   gcroot<Font^> headerFont, otherFont;
+   RenderWindow* win;
+   Font font;
+   int selIndex, count;
+   float x, y; // x is left edge, y is top edge
    GMenuItem options[10];
-   int count, selIndex;
-   GameMenu *child, *parent;*/
+   RectangleShape arrow, bgRects[3];
+   Text title;
+   Layout layout;
 };
 
 #endif

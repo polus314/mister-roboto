@@ -2,11 +2,7 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file defines an BattleMenu class. This draws the main menu
-//          for a battle between two robots.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
+//          for a battle between two robots. 
 //-----------------------------------------------------------------------------
 #ifndef BATTLEMENU_H
 #define BATTLEMENU_H
@@ -22,7 +18,7 @@ public:
    //--------------------------------------------------------------------------
    // Constructor
    //--------------------------------------------------------------------------
-   BattleMenu(Panel^, Character*);
+   BattleMenu(RenderWindow*, Character*, float _x = 0.0f, float _y = 400.0f);
    
    //--------------------------------------------------------------------------
    // Methods inherited from GameMenu
@@ -36,7 +32,6 @@ public:
    // Getter and Setters
    //--------------------------------------------------------------------------
    void SetUserBot(Robot* up) { userPM = up; }
-   GameMenu* GetParentMenu() { return NULL; }
 
 private:
    //--------------------------------------------------------------------------

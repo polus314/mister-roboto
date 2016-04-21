@@ -13,11 +13,11 @@
 class Space
 {
 public:
-   enum SpaceType {GRASS, DIRT, GRAVEL};
-   Space(): dangerous(false), type(GRASS) {};
-   Space(SpaceType type);
+   enum class SpaceType { GRASS, DIRT, GRAVEL };
+   Space() {}
+   Space(SpaceType t);
    ~Space();
-   SpaceType GetType();
+   SpaceType GetType() { return type; }
    bool isSolid() { return solid;}
    bool isDangerous() { return dangerous; }
    bool hasPickUp() { return pickUp != NULL; }

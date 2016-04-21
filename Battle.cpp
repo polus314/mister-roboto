@@ -23,29 +23,6 @@ Battle::Battle() :
 {
 }
 
-
-//void Battle::DrawHealthBars()
-//{
-//   float otherHealth = otherBot->GetPctHealth(), userHealth = userBot->GetPctHealth();
-//   Brush ^HBbrush, ^wordBrush = gcnew SolidBrush(Color::Black);
-//   Font^ font = gcnew Font("Arial", 12);
-//   HBbrush = getBrushColor(otherHealth);
-//
-//   g->DrawString(otherBot->getName(), font, wordBrush, 25, 0);
-//   g->DrawRectangle(gcnew Pen(Color::Black), 25, 27, 150, 25);
-//   g->FillRectangle(HBbrush, 26, 28, int(otherHealth * 149), 24);
-//   g->DrawString("Level: " + otherBot->GetLevel(), font, wordBrush, 25, 12);
-//   g->DrawString(StsToStr(otherBot->GetStatus()), font, wordBrush, 100, 12);
-//
-//   HBbrush = getBrushColor(userHealth);
-//
-//   g->DrawString(userBot->getName(), font, wordBrush, 325, 325);
-//   g->DrawRectangle(gcnew Pen(Color::Black), 325, 365, 150, 25);
-//   g->FillRectangle(HBbrush, 326, 366, int(userHealth * 149), 24);
-//   g->DrawString("Level: " + userBot->GetLevel(), font, wordBrush, 325, 349);
-//   g->DrawString(StsToStr(userBot->GetStatus()), font, wordBrush, 400, 349);
-//}
-
 string Battle::StsToStr(Robot::Status status)
 {
    switch(status)

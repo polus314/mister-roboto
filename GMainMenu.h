@@ -17,12 +17,11 @@
 class GMainMenu : public GameMenu
 {
 public:
-   GMainMenu(Panel^);
+   GMainMenu(RenderWindow* w, float _x = 0.0f, float _y = 0.0f);
    MenuCommand* EnterSelection();
    void NextOption();
    void PreviousOption();
    void Draw();
-   GameMenu* GetParentMenu() { return NULL; }
 
 private:
    void DrawArrow();

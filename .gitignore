@@ -3,5 +3,7 @@
 *.vcxproj
 *.vcxproj.filters
 *.dll
+*.opensdf
 Debug/*
 ipch/*
+Snapshots/*
