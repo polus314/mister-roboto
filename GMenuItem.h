@@ -4,14 +4,12 @@
 // Purpose: This file defines a GMenuItem, or Game Menu Item, class. Menu Items
 //          are used by Menu Classes to display the possible options and to 
 //          keep track of which option is selected.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef GMENUITEM_H
 #define GMENUITEM_H
+
+#include <SFML/Graphics.hpp>
 
 class GMenuItem
 {
@@ -20,23 +18,24 @@ public:
    // Constructors
    //--------------------------------------------------------------------------
    GMenuItem() {}
-   GMenuItem(String^ s, bool isHeader = false): text(s), header(isHeader), selected(false) {}
+   GMenuItem(sf::String t, sf::Font* f, int size = 18);
 
    //--------------------------------------------------------------------------
    // Getters
    //--------------------------------------------------------------------------
-   String^ getText() { return text; }
+   sf::Text* getText() { return &text; }
    bool isHeader() { return header; }
    bool isSelected() { return selected; }
 
    //--------------------------------------------------------------------------
    // Setters
    //--------------------------------------------------------------------------
-   void select() { selected = true; }
-   void deselect() { selected = false; }
+   void select();
+   void deselect();
+   void setPosition(float x, float y) { text.setPosition(x,y); }
 
 private:
-   gcroot<String^> text;
+   sf::Text text;
    bool header;
    bool selected;
 };

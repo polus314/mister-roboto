@@ -4,10 +4,6 @@
 // Purpose: This file defines an ItemMenu class. The Item Menu is displayed to
 //          show what the character has in their inventory. Items can be
 //          scrolled through and one can be chosen.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef ITEMMENU_H
@@ -19,12 +15,11 @@
 class ItemMenu : public GameMenu 
 {
 public:
-   ItemMenu(Panel^, GameMenu*, Character*);
+   ItemMenu(RenderWindow*, Character*, float _x = 0.0f, float _y = 0.0f);
    void Draw();
    void NextOption();
    void PreviousOption();
    MenuCommand* EnterSelection();
-   GameMenu* GetParentMenu() { return parent; }
    
 private:
    Character* trainer;

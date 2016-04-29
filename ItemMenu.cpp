@@ -2,40 +2,43 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file implements the methods declared in ItemMenu.h
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
 #include "ItemMenu.h"
 
-ItemMenu::ItemMenu(Panel^ _panel, GameMenu* p, Character* george)
+ItemMenu::ItemMenu(RenderWindow* w, Character* george, float _x, float _y)
+   : GameMenu(w, _x, _y)
 {
-   panel = _panel;
-   parent = p;
    trainer = george;
 
    count = selIndex = 0;   
-   g = panel->CreateGraphics();
    PickUp* item = trainer->GetItem(count);
    while(item != NULL)
    {
-      options[count] = GMenuItem(item->toString());
+      options[count] = GMenuItem(String(item->toString()), &font);
       count++;
       item = trainer->GetItem(count);
    }
-   options[count] = GMenuItem("Exit");
+   options[count] = GMenuItem(String("Exit"), &font);
+
+   for(int i = 0; i <= count; i++)
+      options[i].setPosition(_x + 10.0f, _y + i * 50);
+
+   bgRects[0] = RectangleShape(Vector2f(100.0f, 50.0f + count * 50.0f));
+   bgRects[0].setPosition(_x, _y);
+   bgRects[0].setFillColor(Color::White);
+
+   options[0].select();
 }
 
 
 void ItemMenu::Draw()
 {
+   win->draw(bgRects[0]);
    for(int i = 0; i <= count; i++)
    {
-      g->FillRectangle(backBrush, 10, 50 * i, 240, 50);
-      g->DrawString(options[i].getText(), otherFont, regBrush, 50, float(50 * i));
+      win->draw(*options[i].getText());
    }
    DrawArrow();
 }
@@ -63,12 +66,13 @@ MenuCommand* ItemMenu::EnterSelection()
       PickUp* item = trainer->RemoveItem(selIndex);
       return new MenuCommand(item);
    }
-   return new MenuCommand(parent);
+   return new MenuCommand();
 }
 
 void ItemMenu::DrawArrow()
 {
-   int xPos = 10;
-   int yPos = 50 * selIndex;
-   g->FillRectangle(regBrush, xPos, yPos, 15, 5);
+   float xPos = x;
+   float yPos = float(50 * selIndex);
+   arrow.setPosition(xPos, yPos);
+   win->draw(arrow);
 }

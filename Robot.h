@@ -63,8 +63,7 @@ public:
    //--------------------------------------------------------------------------
    // Getter methods
    //--------------------------------------------------------------------------
-   Bitmap^ getSprite() { return sprite; }
-   String^ getName() { return name; }
+   string getName() { return name; }
    Ability* getMove(int index) { return moves[index]; }
    Ability::Type getType1() { return type1; }
    Ability::Type getType2() { return type2; }
@@ -80,7 +79,7 @@ public:
    // Reduces current health proportionally to the given amount, minimum
    // being 0
    //--------------------------------------------------------------------------
-   void takeDamage(int);
+   void takeDamage(int atkStrength);
 
    //--------------------------------------------------------------------------
    // Changes status according to the given effect
@@ -121,8 +120,7 @@ private:
    Ability* moves[4];
    Robot::ID id;
    Ability::Type type1, type2;
-   gcroot<String^> name;
-   gcroot<Bitmap^> sprite;
+   string name;
 
    //--------------------------------------------------------------------------
    // Reads in data from a csv file to construct a new robot that has the given

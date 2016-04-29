@@ -4,11 +4,7 @@
 // Purpose: This file defines a GameMap class. The GameMap contains the visual
 //          information needed to draw the world as well as information on what
 //          spaces contain, such as items on the ground or whether a space will
-//          produce random encounters.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
+//          produce random encounters. Not a GUI class.
 //-----------------------------------------------------------------------------
 
 #ifndef GAMEMAP_H
@@ -26,27 +22,11 @@ public:
    // Constructors
    //--------------------------------------------------------------------------
    GameMap();
-   GameMap(Panel^);
-
-   //--------------------------------------------------------------------------
-   // Repaints entire map
-   //--------------------------------------------------------------------------
-   void repaintAll(int, int);
-
-   //--------------------------------------------------------------------------
-   // Repaints the nine spaces centered at the given coordinates
-   //--------------------------------------------------------------------------
-   void repaint(int,int);
-
-   //--------------------------------------------------------------------------
-   // Saves map as a single bitmap to facilitate faster redrawing
-   //--------------------------------------------------------------------------
-   void saveAsBitmap();
 
    //--------------------------------------------------------------------------
    // Returns true if space cannot be walked through
    //--------------------------------------------------------------------------
-   bool spaceIsSolid(int x, int y) { return squares[x][y]->isSolid(); }
+   bool spaceIsSolid(int x, int y);
 
    //--------------------------------------------------------------------------
    // Returns true if random encounters can happen on this space
@@ -71,9 +51,6 @@ public:
 
 private:
    Space* squares[MAX_HEIGHT][MAX_WIDTH];
-   gcroot<Panel^> panel;
-   gcroot<Graphics^> g;
-   //bool drawn;
 };
 
 

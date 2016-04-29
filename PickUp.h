@@ -19,19 +19,16 @@ public:
    enum class ItemType { POKEBALL, POTION };
    static string ItemTypeToSaveString(ItemType it);
    static ItemType SaveStringToItemType(string typeStr);
-   static const int saveChars = 16;
+   static const int saveChars = 8;
    PickUp();
    void LoadFromSaveData(string info);
-   Bitmap^ getImage() { return image; }
    ItemType GetType() { return type; }
-   String^ toString() { return "PokeBall"; }
+   string toString() { return "PokeBall"; }
    string GetSaveData();
 
 
 private:
-   int xCoord, yCoord;
    ItemType type;
-   gcroot<Bitmap^> image;
 
 };
 

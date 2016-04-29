@@ -4,16 +4,11 @@
 // Purpose: This file defines a Character class. A character is able to carry
 //          items in their backpack and have robots that accompany them. A 
 //          character is also able to move around in the world.
-//
-// Created: 2/6/2016
-//
-// Changed: 3/7/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "Sprite.h"
 #include "Robot.h"
 #include "PickUp.h"
 
@@ -22,22 +17,10 @@ class Character
 public:
    static const int baseSaveChars = 20;
    //--------------------------------------------------------------------------
-   // Enumerates all the different stances that a character will need to have
-   // drawn. The first letter indicates direction facing, the second letter
-   // indicates which foot is forward
-   //--------------------------------------------------------------------------
-   enum class DIRECTION 
-   { 
-      STAND_R , STAND_L, STAND_U, STAND_D, WALK_L_L, WALK_L_R, WALK_U_L, 
-      WALK_U_R, WALK_R_L, WALK_R_R, WALK_D_L, WALK_D_R 
-   };
-
-   //--------------------------------------------------------------------------
    // Constructors
    //--------------------------------------------------------------------------
    Character();
-   Character(Panel^ _panel, Bitmap^ _sheet);
-   Character(Panel^ _panel, Bitmap^ _sheet, int x, int y, bool playable, string info, int ic, int bc);
+   Character(int x, int y);
 
    //--------------------------------------------------------------------------
    // Used to load the character from the save file
@@ -45,19 +28,9 @@ public:
    void LoadFromSaveData(string info);
 
    //--------------------------------------------------------------------------
-   // Draws the character on its panel using character's xCoord and yCoord
-   //--------------------------------------------------------------------------
-   void Draw();
-
-   //--------------------------------------------------------------------------
-   // Draws the character on its panel using given xCoord and yCoord
-   //--------------------------------------------------------------------------
-   void Draw(float,float);
-
-   //--------------------------------------------------------------------------
    // Getters
    //--------------------------------------------------------------------------
-   String^ GetDialogue() { return dialogue; }
+   string GetDialogue() { return dialogue; }
    int getX() { return xCoord; }
    int getY() { return yCoord; }
    Robot* getRobot(int);
@@ -70,11 +43,6 @@ public:
    void increaseY() { yCoord++; }
    void decreaseX() { xCoord--; }
    void decreaseY() { yCoord--; }
-
-   //--------------------------------------------------------------------------
-   // Set the direction the character is facing
-   //--------------------------------------------------------------------------
-   void setDirection(DIRECTION d) { direction = d; }
 
    //--------------------------------------------------------------------------
    // Adds the given item to the character's inventory
@@ -106,20 +74,9 @@ public:
 private:
    bool playable;
    int xCoord, yCoord, itemCount, botCount;
-   PickUp* inventory[10];   
+   PickUp* inventory[10];
    Robot* team[6];
-   DIRECTION direction;
-   Sprite* allSprites;
-   gcroot<String^> dialogue;
-   gcroot<Bitmap^> sprite, sheet;
-   gcroot<Panel^> panel;
-   gcroot<Graphics^> g;
-
-   //--------------------------------------------------------------------------
-   // Assigns the correct bitmap to be the sprite for this character, depending
-   // on what direction the character is facing
-   //--------------------------------------------------------------------------
-   void setSprite();  
+   string dialogue; 
 };
 
 

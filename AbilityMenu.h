@@ -1,33 +1,34 @@
 //-----------------------------------------------------------------------------
 // Project: Mister Roboto
 // 
-// Purpose: This file defines a TeamMenu class. The team menu displays all the
-//          robots currently accompanying the character and shows some info
-//          about each.
+// Purpose: This file defines an AbilityMenu class. The ability menu displays
+//          all of the abilities the given robot knows.
 //
 // Created: 2/6/2016
 //
 // Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
-#ifndef TEAMMENU_H
-#define TEAMMENU_H
+#ifndef ABILITYMENU_H
+#define ABILITYMENU_H
 
 #include "GameMenu.h"
-#include "Character.h"
+#include "Robot.h"
 
-class TeamMenu : public GameMenu
+class AbilityMenu : public GameMenu
 {
 public:
-   TeamMenu(Panel^, GameMenu*, Character*);
+   AbilityMenu::AbilityMenu(RenderWindow* w, Robot*, float _x = 0.0f, float _y = MR::WIN_HEIGHT * 4 / 5); 
+
    void Draw();
    void NextOption();
    void PreviousOption();
    MenuCommand* EnterSelection();
-   GameMenu* GetParentMenu();
+   void SetUserBot(Robot* ur) { userBot = ur; }
 
 private:
-   Character* trainer;
+   Robot* userBot;
+
    void DrawArrow();
 };
 
