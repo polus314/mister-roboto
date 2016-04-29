@@ -2,10 +2,6 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file implements the methods declared in PickUp.h
-//
-// Created: 2/6/2016
-//
-// Changed: 3/7/2016 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
@@ -16,7 +12,7 @@ PickUp::PickUp()
    type = PickUp::ItemType::POKEBALL;
 }
 
-string PickUp::GetSaveData()
+string PickUp::GetSaveData() const
 {
    string info;
    info.append(ItemTypeToSaveString(type));

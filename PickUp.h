@@ -4,10 +4,6 @@
 // Purpose: This file defines a PickUp class. A pickup is something a character
 //          can pick up in the wild or buy at a vendor, and then store in their
 //          inventory.
-//
-// Created: 2/6/2016
-//
-// Changed: 3/7/2016
 //-----------------------------------------------------------------------------
 
 #ifndef PICKUP_H
@@ -24,7 +20,7 @@ public:
    void LoadFromSaveData(string info);
    ItemType GetType() { return type; }
    string toString() { return "PokeBall"; }
-   string GetSaveData();
+   string GetSaveData() const;
 
 
 private:

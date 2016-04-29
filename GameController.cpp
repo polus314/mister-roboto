@@ -4,6 +4,7 @@
 GameController::GameController()
 {
    inTrainerBattle = inWildBattle = false;
+   map.placePickUp(new PickUp(), 10, 10);
 }
 
 

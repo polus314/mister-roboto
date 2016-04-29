@@ -35,7 +35,7 @@ private:
       }
    };
 
-   enum class State { ROAMING, PAUSED, FIGHTING, MAIN_MENU };
+   enum class State { ROAMING, PAUSED, FIGHTING, MAIN_MENU, TO_FTG };
 
    GameController gameCon;
    RenderWindow* window;
@@ -50,28 +50,31 @@ private:
    RectangleShape fade, fightingBG;
    BattleGUI battleGUI;
    
+   void checkForBattle();
+   void draw();            // called once per frame, calls other draw methods
    void drawBackground();
    void drawCharacters();
    void drawMenus();
    void drawFightingBG();
    void drawRoamingBG();
    void drawMenuBG();
-   void handleKeyPress(Event e);
-   void handleKeyRoaming(Event e);
-   void handleKeyPaused(Event e);
-   void handleKeyMM(Event e);
-   void handleKeyFighting(Event e);
+   void fadeToFighting();
+   void handleKeyPress(Event& e);
+   void handleKeyRoaming(Event& e);
+   void handleKeyPaused(Event& e);
+   void handleKeyMM(Event& e);
+   void handleKeyFighting(Event& e);
    void handleCommand(MenuCommand* m);
-   void loadMap();
-   void moveBackground(Vector2f v);
-   void updatePositions();
-   void setSprite(Sprite& prot);
-   void takeAStep(Sprite& prot);
-   void stopWalking(Sprite& prot);
    void initializeConstants();
    void initializeNewGame();
-   void loadGameFromSave(string filename);
-   void checkForBattle();
+   void loadMap();
+   void loadGameFromSave(const string& filename);
+   void moveBackground(Vector2f& v);
+   void setSprite(Sprite& prot);
+   void stopWalking(Sprite& prot);
+   void takeAStep(Sprite& prot);
+   void update();                   // called once per frame
+   void updatePositions();
 };
 
 #endif

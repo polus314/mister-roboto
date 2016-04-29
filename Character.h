@@ -25,7 +25,7 @@ public:
    //--------------------------------------------------------------------------
    // Used to load the character from the save file
    //--------------------------------------------------------------------------
-   void LoadFromSaveData(string info);
+   void LoadFromSaveData(const string& info);
 
    //--------------------------------------------------------------------------
    // Getters
@@ -69,7 +69,7 @@ public:
    // Returns a string that contains all data needed to reproduce this 
    // character when loaded later.
    //--------------------------------------------------------------------------
-   string GetSaveData();
+   string GetSaveData() const;
 
 private:
    bool playable;

@@ -2,7 +2,7 @@
 #include "BattleGUI.h"
 
 BattleGUI::BattleGUI(RenderWindow* w, Robot* user, Robot* other, Font* f)
-   : uBar(w, user, f, 300.0f, 350.0f), oBar(w, other, f, 50.0f, 10.0f)
+   : uBar(w, user, f, 325.0f, 325.0f), oBar(w, other, f, 25.0f, 10.0f)
 {
    win = w;
    ub = user;

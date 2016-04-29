@@ -81,7 +81,7 @@ void Character::AcquireRobot(Robot* bot)
       team[botCount++] = bot;
 }
 
-string Character::GetSaveData()
+string Character::GetSaveData() const
 {
    string info;
    info.append(SaveIntToStr(itemCount));
@@ -97,7 +97,7 @@ string Character::GetSaveData()
    return info;
 }
 
-void Character::LoadFromSaveData(string info)
+void Character::LoadFromSaveData(const string& info)
 {
    int id;
    itemCount = stoi(info.substr(0, 4));

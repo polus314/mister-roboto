@@ -57,14 +57,9 @@ void GUIController::run()
       elapsedTime = clock.getElapsedTime();
       if(elapsedTime > DRAW_DELAY)
       {
-         window->clear();
-
-         updatePositions();
-         drawBackground();
-         drawCharacters();
-         drawMenus();
-
-         window->display();
+         update();
+         draw();
+         
          clock.restart();
          drawCount = (drawCount + 1) % 100;
       }
@@ -119,10 +114,16 @@ void GUIController::drawBackground()
          drawRoamingBG();
          break;
       case State::PAUSED :
-         drawMenuBG();
+         drawRoamingBG();
+         window->draw(fade);
          break;
       case State::MAIN_MENU :
-         drawMenuBG();
+
+         break;
+      case State::TO_FTG :
+         drawRoamingBG();
+         window->draw(fade);
+         break;
    }
 }
 
@@ -135,12 +136,6 @@ void GUIController::drawRoamingBG()
       }
 }
 
-void GUIController::drawMenuBG()
-{
-   window->draw(fade);
-   drawRoamingBG();
-}
-
 void GUIController::drawFightingBG()
 {
    window->draw(fightingBG);
@@ -148,7 +143,7 @@ void GUIController::drawFightingBG()
 
 void GUIController::drawCharacters()
 {
-   if(state == State::ROAMING || state == State::PAUSED)
+   if(state == State::ROAMING || state == State::PAUSED || state == State::TO_FTG)
       window->draw(george.getSprite());
    else if(state == State::FIGHTING)
       battleGUI.drawBattleScene(); // TODO - implement this
@@ -166,7 +161,7 @@ void GUIController::drawMenus()
    }
 }
 
-void GUIController::handleKeyPress(sf::Event e)
+void GUIController::handleKeyPress(Event& e)
 {
    switch(state)
    {
@@ -185,7 +180,7 @@ void GUIController::handleKeyPress(sf::Event e)
    }
 }
 
-void GUIController::handleKeyRoaming(Event e)
+void GUIController::handleKeyRoaming(Event& e)
 {
    Character* prot = gameCon.GetMainCharacter();
    switch(e.key.code)
@@ -229,7 +224,7 @@ void GUIController::handleKeyRoaming(Event e)
    }
 }
 
-void GUIController::handleKeyPaused(Event e)
+void GUIController::handleKeyPaused(Event& e)
 {
    GameMenu* menu = menus.back();
    MenuCommand* command;
@@ -255,13 +250,13 @@ void GUIController::handleKeyPaused(Event e)
    }
 }
 
-void GUIController::handleKeyMM(Event e)
+void GUIController::handleKeyMM(Event& e)
 {
    if(e.key.code != sf::Keyboard::Space) // no backing out of main menu
       handleKeyPaused(e);
 }
 
-void GUIController::handleKeyFighting(Event e)
+void GUIController::handleKeyFighting(Event& e)
 {
    MenuCommand* command;
    GameMenu* menu = menus.back();
@@ -338,7 +333,7 @@ void GUIController::handleCommand(MenuCommand* m)
    }
 }
 
-void GUIController::moveBackground(sf::Vector2f v)
+void GUIController::moveBackground(Vector2f& v)
 {
    for(int i = 0; i < MAX_WIDTH; i++)
       for(int j = 0; j < MAX_HEIGHT; j++)
@@ -351,7 +346,7 @@ void GUIController::checkForBattle()
 {
    if(gameCon.inABattle())
    {
-      state = State::FIGHTING;
+      state = State::TO_FTG;
       menus.push_back(new BattleMenu(window, gameCon.GetMainCharacter()));
       battleGUI = BattleGUI(window, gameCon.GetMainCharacter()->getRobot(0), gameCon.getEnemy(), &font);
    }
@@ -406,4 +401,38 @@ void GUIController::updatePositions()
       george.stopWalking();
 
    george.setStance();
+}
+
+void GUIController::fadeToFighting()
+{
+   Color color = fade.getFillColor();
+   if(color.a > 255 - 3)
+   {
+      color.a = 128;
+      fade.setFillColor(color);
+      state = State::FIGHTING;
+   }
+   else
+   {   
+      color.a += 3;
+      fade.setFillColor(color);
+   }
+}
+
+void GUIController::update()
+{
+   updatePositions();
+   if(state == State::TO_FTG)
+      fadeToFighting();
+}
+
+void GUIController::draw()
+{
+   window->clear();
+
+   drawBackground();
+   drawCharacters();
+   drawMenus();
+
+   window->display();
 }

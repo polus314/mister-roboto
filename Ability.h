@@ -4,11 +4,7 @@
 // Purpose: This file defines an Ability class. An ability is something that a
 //          Robot uses in battle to aid itself in winning. Examples are basic
 //          attacks that do damage to the opponent, attacks that paralyze or
-//          confuse the opponent, or abilities that raise the Robot's own stats
-//
-// Created: 2/6/2016
-//
-// Changed: 3/7/2016 
+//          confuse the opponent, or abilities that raise the Robot's own stats 
 //-----------------------------------------------------------------------------
 #ifndef ABILITY_H
 #define ABILITY_H
@@ -29,7 +25,7 @@ public:
    //--------------------------------------------------------------------------
    // Returns a 4 character string for the given Type
    //--------------------------------------------------------------------------
-   static string SaveTypeToStr(Type);
+   static string SaveTypeToStr(Type t);
 
    //--------------------------------------------------------------------------
    // Enumerates the different effects that an ability can have when used in a
@@ -49,7 +45,7 @@ public:
    //--------------------------------------------------------------------------
    // Used to load data and update this Ability from saved data
    //--------------------------------------------------------------------------
-   void LoadFromSaveData(string info);
+   void LoadFromSaveData(const string& info);
 
    //--------------------------------------------------------------------------
    // Getters
@@ -70,12 +66,12 @@ public:
    //--------------------------------------------------------------------------
    // Returns the corresponding Ability::Type for the given string
    //--------------------------------------------------------------------------
-   static Type TypeFromStr(string typeName);
+   static Type TypeFromStr(const string& typeName);
 
    //--------------------------------------------------------------------------
    // Returns a string with all the info needed to load this ability later
    //--------------------------------------------------------------------------
-   string GetSaveData();
+   string GetSaveData() const;
 
 private:
    //--------------------------------------------------------------------------
