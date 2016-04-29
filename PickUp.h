@@ -12,7 +12,7 @@
 class PickUp
 {
 public:
-   enum class ItemType { SWORD, POTION };
+   enum class ItemType { SWORD, POTION, SHIELD };
    static string ItemTypeToSaveString(ItemType it);
    static ItemType SaveStringToItemType(string typeStr);
    static const int saveChars = 8;
