@@ -40,7 +40,7 @@ Ability::Ability(string _name, Effect eff1, int str1, Effect eff2, int str2, Abi
    strength2 = str2;
 }
 
-Ability::Type Ability::TypeFromStr(string typeName)
+Ability::Type Ability::TypeFromStr(const string& typeName)
 {
    if(typeName == "Aluminum")
       return Ability::Type::ALUMINUM;
@@ -66,7 +66,7 @@ Ability::Type Ability::TypeFromStr(string typeName)
       return Ability::Type::NONE;
 }
 
-string Ability::GetSaveData()
+string Ability::GetSaveData() const
 {
    return "ability-"; //TODO FIX THIS
 }
@@ -90,7 +90,7 @@ string Ability::SaveTypeToStr(Type t)
    return "fxme";
 }
 
-void Ability::LoadFromSaveData(string info)
+void Ability::LoadFromSaveData(const string& info)
 {
    if(info == "ability-")
    {

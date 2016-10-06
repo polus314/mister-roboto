@@ -14,7 +14,7 @@ GMainMenu::GMainMenu(RenderWindow* w, float _x, float _y)
    bgRects[0] = RectangleShape(Vector2f(MR::WIN_WIDTH, MR::WIN_HEIGHT));  
    bgRects[0].setPosition(_x, _y);
    bgRects[0].setFillColor(Color::Blue);
-   title = Text(String("Pokemon!"), font, 70);
+   title = Text(String("Robots!"), font, 70);
    title.setPosition(50.0f, 50.0f);
    title.setColor(Color::Yellow);
    options[count++] = GMenuItem(String("New Game"), &font, 30);
@@ -69,13 +69,17 @@ void GMainMenu::DrawArrow()
 
 MenuCommand* GMainMenu::EnterSelection()
 {
-   if(selIndex == 0)
-      return new MenuCommand(MenuCommand::Function::NEW_GAME); // TODO - change back to NEW_GAME
-   else if(selIndex == 1)
-      return new MenuCommand(MenuCommand::Function::LOAD);
-   else if (selIndex == 2)
-      return NULL;
-   else if (selIndex == 3)
-      return new MenuCommand(MenuCommand::Function::EXIT_GAME);
-   return NULL;
+   switch(selIndex)
+   {
+      case 0: 
+         return new MenuCommand(MenuCommand::Function::NEW_GAME);
+      case 1:
+         return new MenuCommand(MenuCommand::Function::LOAD);
+      case 2:
+         return NULL;
+      case 3:
+         return new MenuCommand(MenuCommand::Function::EXIT_GAME);
+      default:
+         return NULL;
+   }
 }

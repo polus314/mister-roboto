@@ -43,7 +43,7 @@ Robot::Robot(ID _id)
 
 void Robot::Update(string info)
 {
-   string stat = info.substr(0, 4); //TODO - FINISH THIS
+   string stat = info.substr(0, 4); // TODO - FINISH THIS
 }
 
 

@@ -17,8 +17,6 @@ class StartMenu : public GameMenu
 {
 public:
    StartMenu(RenderWindow*, Character*, float _x = 375.0f, float _y = 0.0f);
-   void NextOption();
-   void PreviousOption();
    MenuCommand* EnterSelection();
    void Draw();
 

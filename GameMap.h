@@ -26,31 +26,41 @@ public:
    //--------------------------------------------------------------------------
    // Returns true if space cannot be walked through
    //--------------------------------------------------------------------------
-   bool spaceIsSolid(int x, int y);
+   bool isSolid(int x, int y) const;
 
    //--------------------------------------------------------------------------
    // Returns true if random encounters can happen on this space
    //--------------------------------------------------------------------------
-   bool spaceIsDangerous(int x, int y) { return squares[x][y]->isDangerous(); }
+   bool isDangerous(int x, int y) const { return squares[x][y].isDangerous(); }
+
+   //--------------------------------------------------------------------------
+   // Returns type of space at coordinates
+   //--------------------------------------------------------------------------
+   Space::SpaceType getType(int x, int y) const { return squares[x][y].GetType(); }
 
    //--------------------------------------------------------------------------
    // Returns true if space contains an item that can be picked up
    //--------------------------------------------------------------------------
-   bool hasPickUp(int x, int y) { return squares[x][y]->hasPickUp(); }
+   bool hasPickUp(int x, int y) const { return squares[x][y].hasPickUp(); }
 
    //--------------------------------------------------------------------------
    // Places an item on the map at the given location
    //--------------------------------------------------------------------------
-   void placePickUp(PickUp* item, int x, int y);
+   void placePickUp(Item& item, int x, int y);
 
    //--------------------------------------------------------------------------
-   // Removes the item from the given space on the map and returns a pointer to
-   // that item
+   // Removes the item from the given space on the map
+   // Returns true if item is found and removed
    //--------------------------------------------------------------------------
-   PickUp* removePickUp(int x, int y);
+   bool removePickUp(int x, int y);
+
+   //--------------------------------------------------------------------------
+   // Returns the item at the given coordinates
+   //--------------------------------------------------------------------------
+   const Item& getItem(int x, int y) const;
 
 private:
-   Space* squares[MAX_HEIGHT][MAX_WIDTH];
+   Space squares[MAX_HEIGHT][MAX_WIDTH];
 };
 
 

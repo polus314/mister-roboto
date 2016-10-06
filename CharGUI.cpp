@@ -79,3 +79,9 @@ void CharGUI::setStance()
    tex.loadFromImage(sheet, sf::IntRect(x, y, SPRITE_WIDTH, SPRITE_HEIGHT));
    sprite.setTexture(tex);
 }
+
+void CharGUI::turn(Facing f)
+{
+   dir = f;
+   setStance();
+}

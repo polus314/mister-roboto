@@ -8,7 +8,7 @@
 #ifndef SPACE_H
 #define SPACE_H
 
-#include "PickUp.h"
+#include "Item.h"
 
 class Space
 {
@@ -16,17 +16,17 @@ public:
    enum class SpaceType { GRASS, DIRT, GRAVEL };
    Space() {}
    Space(SpaceType t);
-   ~Space();
-   SpaceType GetType() { return type; }
-   bool isSolid() { return solid;}
-   bool isDangerous() { return dangerous; }
-   bool hasPickUp() { return pickUp != NULL; }
-   void placePickUp(PickUp* item);
-   PickUp* removePickUp();
+   SpaceType GetType() const { return type; }
+   bool isSolid() const { return solid;}
+   bool isDangerous() const { return dangerous; }
+   bool hasPickUp() const { return pickUp != Item(); }
+   void placePickUp(Item& item);
+   bool removePickUp();
+   const Item& getItem() const;
 
 private:
    bool dangerous, solid;
-   PickUp* pickUp;
+   Item pickUp;
    SpaceType type;
 };
 

@@ -17,8 +17,6 @@ class ItemMenu : public GameMenu
 public:
    ItemMenu(RenderWindow*, Character*, float _x = 0.0f, float _y = 0.0f);
    void Draw();
-   void NextOption();
-   void PreviousOption();
    MenuCommand* EnterSelection();
    
 private:

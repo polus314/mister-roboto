@@ -39,6 +39,7 @@ void BattleMenu::Draw()
    g->DrawString(options[2].getText(), otherFont, regBrush, 300, 450);
    g->DrawString(options[3].getText(), otherFont, regBrush, 420, 450);
    DrawArrow();*/
+   
    win->draw(bgRects[0]);
    for(int i = 0; i < count; i++)
    {

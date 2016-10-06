@@ -14,7 +14,7 @@
 #define BATTLE_H
 
 #include "Robot.h"
-#include "PickUp.h"
+#include "Item.h"
 
 class Battle
 {
@@ -24,13 +24,13 @@ public:
    Battle(Robot*, Robot*);
    void UseAbility(Ability* a, bool isUser);
    State DoTurnEvents(Ability*);
-   State DoTurnEvents(PickUp*);
+   State DoTurnEvents(Item*);
    Robot* GetOtherBot() { return otherBot;}
 
 private:
    Robot *userBot, *otherBot;
    bool IsSuperEffective(Ability::Type, Ability::Type);
-   bool ThrowPokeBall(PickUp*);
+   bool ThrowPokeBall(Item*);
    State CheckForFainting();
    string StsToStr(Robot::Status);
    void DoPoisonDamage();

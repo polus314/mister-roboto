@@ -11,7 +11,7 @@
 
 #include "GMenuItem.h"
 #include "Ability.h"
-#include "PickUp.h"
+#include "Item.h"
 #include "MenuCommand.h"
 
 class GameMenu
@@ -21,8 +21,8 @@ public:
    GameMenu();
    GameMenu(RenderWindow* w, float _x, float _y);
    virtual void Draw() = 0;
-   virtual void NextOption() = 0;
-   virtual void PreviousOption() = 0;
+   virtual void NextOption();
+   virtual void PreviousOption();
    virtual MenuCommand* EnterSelection() = 0;
    Layout getLayout() { return layout; }
 
@@ -35,6 +35,9 @@ protected:
    RectangleShape arrow, bgRects[3];
    Text title;
    Layout layout;
+
+   virtual void SetUpBackground(float width, float height);
+   virtual void DrawBackground();
 };
 
 #endif

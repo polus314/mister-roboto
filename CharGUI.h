@@ -21,7 +21,7 @@ public:
    void takeAStep();
    void stopWalking();
    void setStance();
-   void turn(Facing f) { dir = f; }
+   void turn(Facing f);
 private:
    Facing dir;
    Sprite sprite;

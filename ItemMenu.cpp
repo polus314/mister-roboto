@@ -12,22 +12,20 @@ ItemMenu::ItemMenu(RenderWindow* w, Character* george, float _x, float _y)
 {
    trainer = george;
 
-   count = selIndex = 0;   
-   PickUp* item = trainer->GetItem(count);
-   while(item != NULL)
+   count = selIndex = 0;
+   int size = trainer->getInventorySize();
+   for(count; count < size; count++)
    {
-      options[count] = GMenuItem(String(item->toString()), &font);
-      count++;
-      item = trainer->GetItem(count);
+      Item item = trainer->GetItem(count);
+      string msg = item.toString();
+      options[count] = GMenuItem(String(msg), &font);
    }
-   options[count] = GMenuItem(String("Exit"), &font);
+   options[count++] = GMenuItem(String("Exit"), &font);
 
    for(int i = 0; i <= count; i++)
       options[i].setPosition(_x + 10.0f, _y + i * 50);
 
-   bgRects[0] = RectangleShape(Vector2f(100.0f, 50.0f + count * 50.0f));
-   bgRects[0].setPosition(_x, _y);
-   bgRects[0].setFillColor(Color::White);
+   SetUpBackground(100.0f, 50.0f + count * 50.0f);
 
    options[0].select();
 }
@@ -35,44 +33,20 @@ ItemMenu::ItemMenu(RenderWindow* w, Character* george, float _x, float _y)
 
 void ItemMenu::Draw()
 {
-   win->draw(bgRects[0]);
+   DrawBackground();
    for(int i = 0; i <= count; i++)
    {
       win->draw(*options[i].getText());
    }
-   DrawArrow();
-}
-
-void ItemMenu::NextOption()
-{
-   options[selIndex].deselect();
-   if(++selIndex > count)
-      selIndex = 0;
-   options[selIndex].select();
-}
-
-void ItemMenu::PreviousOption()
-{
-   options[selIndex].deselect();
-   if(--selIndex < 0)
-      selIndex = count;
-   options[selIndex].select();
 }
 
 MenuCommand* ItemMenu::EnterSelection()
 {
-   if(selIndex < count)
+   if(selIndex < count - 1)
    {
-      PickUp* item = trainer->RemoveItem(selIndex);
-      return new MenuCommand(item);
+      Item item = trainer->GetItem(selIndex);
+      trainer->RemoveItem(selIndex);
+      return new MenuCommand(new Item(item));
    }
    return new MenuCommand();
-}
-
-void ItemMenu::DrawArrow()
-{
-   float xPos = x;
-   float yPos = float(50 * selIndex);
-   arrow.setPosition(xPos, yPos);
-   win->draw(arrow);
 }

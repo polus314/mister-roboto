@@ -11,57 +11,47 @@
 
 class GameMenu;
 class Ability;
-class PickUp;
-
-// There should only ever be one of these four things
-// that isn't NULL
+class Item;
 
 struct MenuCommand
 {
-   enum class Function { SAVE, LOAD, EXIT_MENU, EXIT_TO_MM, EXIT_GAME, NEW_GAME };
+   enum class Function 
+   { SAVE, LOAD, EXIT_MENU, NEW_MENU, EXIT_TO_MM, EXIT_GAME, NEW_GAME, BUY_ITEM, SELL_ITEM,
+      USE_ABILITY, USE_ITEM };
 
-   GameMenu *nextMenu;
-   Ability *ability;
-   PickUp *item;
+   union CommandInfo
+   {
+      GameMenu *nextMenu;
+      Ability *ability;
+      Item *item;
+   };
+
+   CommandInfo info;
    Function function;
 
-   MenuCommand()
+   MenuCommand(Function f = Function::EXIT_MENU)
    {
-      nextMenu = NULL;
-      ability = NULL;
-      item = NULL;
-      function = Function::EXIT_MENU;
-   }
-
-   MenuCommand(GameMenu* nm)
-   {
-      nextMenu = nm;
-      ability = NULL;
-      item = NULL;
-   }
-   
-   MenuCommand(Ability* a)
-   {
-      nextMenu = NULL;
-      ability = a;
-      item = NULL;
-   }
-
-   MenuCommand(PickUp* i)
-   {
-      nextMenu = NULL;
-      ability = NULL;
-      item = i;
-   }
-
-   MenuCommand(Function f)
-   {
-      nextMenu = NULL;
-      ability = NULL;
-      item = NULL;
+      info.nextMenu = NULL;
       function = f;
    }
 
+   MenuCommand(GameMenu* nm, Function f = Function::NEW_MENU)
+   {
+      info.nextMenu = nm;
+      function = f;
+   }
+   
+   MenuCommand(Ability* a, Function f = Function::USE_ABILITY)
+   {
+      info.ability = a;
+      function = f;
+   }
+
+   MenuCommand(Item* i, Function f = Function::USE_ITEM)
+   {
+      info.item = i;
+      function = f;
+   }
 };
 
 #endif

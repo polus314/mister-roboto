@@ -7,7 +7,7 @@
 #include "stdafx.h"
 #include "Space.h"
 
-Space::Space(SpaceType t) : pickUp(NULL)
+Space::Space(SpaceType t)
 {
    type = t;
    switch(type)
@@ -27,23 +27,20 @@ Space::Space(SpaceType t) : pickUp(NULL)
    }
 }
 
-Space::~Space()
+void Space::placePickUp(Item& item)
 {
-   if(pickUp)
-      delete pickUp;
-}
-
-void Space::placePickUp(PickUp* item)
-{
-   pickUp = item;
+   pickUp = Item(item);
    solid = true;
 }
 
-PickUp* Space::removePickUp()
+bool Space::removePickUp()
 {
-   PickUp* temp = pickUp;
-   pickUp = NULL;
+   pickUp = Item();
    solid = false;
-   return temp;
+   return true;
 }
 
+const Item& Space::getItem() const
+{
+   return pickUp;
+}

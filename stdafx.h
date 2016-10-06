@@ -7,6 +7,7 @@
 #include "MyUtil.h"
 #include <cassert>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
 

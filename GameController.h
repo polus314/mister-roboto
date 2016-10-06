@@ -9,11 +9,6 @@ class GameController
 {
 public:
    //--------------------------------------------------------------------------
-   // Enumeration of directions character can move
-   //--------------------------------------------------------------------------
-   enum class Direction { LEFT, RIGHT, UP, DOWN };
-
-   //--------------------------------------------------------------------------
    // Default constructor
    //--------------------------------------------------------------------------
    GameController();
@@ -52,7 +47,7 @@ public:
    // Params: d - direction that the main character is trying to move
    // Return: true if space is passable, false if not
    //--------------------------------------------------------------------------
-   bool Walk(Direction d);
+   bool Walk(Character::Direction d);
 
    //--------------------------------------------------------------------------
    // Indicates whether or not there is a battle going on currently
@@ -71,6 +66,33 @@ public:
    // Return: pointer to enemy robot if in battle, NULL otherwise
    //--------------------------------------------------------------------------
    Robot* getEnemy();
+
+   //--------------------------------------------------------------------------
+   // Attempts to pick up an item from the square directly in front of the
+   // character.
+   // Returns a pointer to the item that was picked up, or NULL if there was
+   // no item or it couldn't be picked up
+   //--------------------------------------------------------------------------
+   const Item* PickUpItem();
+
+   //--------------------------------------------------------------------------
+   // Attempts to interact with the item in the square directly in front of the
+   // character
+   // Returns a pointer to the item interacted with, or NULL if there was no
+   // item or it can't be interacted with
+   //--------------------------------------------------------------------------
+   const Item* Interact();
+
+   //--------------------------------------------------------------------------
+   // Returns a reference to the map, which should not be modified
+   //--------------------------------------------------------------------------
+   const GameMap& getMap() const { return map; }
+
+   //--------------------------------------------------------------------------
+   // Uses the given move in battle
+   //--------------------------------------------------------------------------
+   void UseAbility(Ability chosenMove);
+   
 
 private:
    GameMap map;

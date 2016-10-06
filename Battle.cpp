@@ -2,16 +2,10 @@
 // Project: Mister Roboto
 // 
 // Purpose: This file implements the methods declared in Battle.h
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
 #include "Battle.h"
-
-#define DEBUGGING true
 
 Battle::Battle( Robot* uB, Robot* oB) :
    userBot(uB), otherBot(oB)
@@ -153,16 +147,16 @@ Battle::State Battle::CheckForFainting()
 }
 
 
-Battle::State Battle::DoTurnEvents(PickUp* item)
+Battle::State Battle::DoTurnEvents(Item* item)
 {
    State state = State::CONTINUE;
    switch(item->GetType())
    {
-      case PickUp::ItemType::POKEBALL :
+      case Item::ItemType::SWORD : // TODO - fix this
          if(ThrowPokeBall(item))
             return State::OPP_CAUGHT;
          break;    
-      case PickUp::ItemType::POTION :
+      case Item::ItemType::POTION :
          userBot->Heal(50);
          break;
    }
@@ -170,7 +164,7 @@ Battle::State Battle::DoTurnEvents(PickUp* item)
    return state;
 }
 
-bool Battle::ThrowPokeBall(PickUp* item)
+bool Battle::ThrowPokeBall(Item* item)
 {
    // TODO - if(masterBall) 
    //           return true; etc.

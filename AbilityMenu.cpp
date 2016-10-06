@@ -10,11 +10,11 @@
 AbilityMenu::AbilityMenu(RenderWindow* w, Robot* ub, float _x, float _y) : GameMenu(w, _x, _y)
 {
    userBot = ub;
-   selIndex = 0;
+   selIndex = count = 0;
    for(int i = 0; i < 4; i++)
    {
       options[i] = GMenuItem(String(userBot->getMove(i)->getName()), &font);
-      options[i].setPosition(_x + float(i * 100), _y + 25.0f);
+      options[i].setPosition(_x, _y + float(i * 25.0f));
       count++;
    }
 
@@ -26,19 +26,10 @@ AbilityMenu::AbilityMenu(RenderWindow* w, Robot* ub, float _x, float _y) : GameM
 
 void AbilityMenu::Draw()
 {
-//   g->FillRectangle(backBrush, 0, 400, 500, 100);
-//   g->DrawRectangle(pen, 5, 405, 195, 90);
-//   if(userBot != NULL)
-//   {
-//      g->DrawString(" " + userBot->getMove(0)->getName() /*+ "  Strength:  " + userPM->getMove(0)->getStrength()*/, otherFont, regBrush, 10.0, 415.0);
-//      g->DrawString(" " + userBot->getMove(1)->getName() /*+ "  Strength:  " + userPM->getMove(1)->getStrength()*/, otherFont, regBrush, 10.0, 430.0);
-//      g->DrawString(" " + userBot->getMove(2)->getName() /*+ "  Strength:  " + userPM->getMove(2)->getStrength()*/, otherFont, regBrush, 10.0, 445.0);
-//      g->DrawString(" " + userBot->getMove(3)->getName() /*+ "  Strength:  " + userPM->getMove(3)->getStrength()*/, otherFont, regBrush, 10.0, 460.0);
-   // TODO - redo this
    win->draw(bgRects[0]);
    for(int i = 0; i < count; i++)
       win->draw(*options[i].getText());
-   DrawArrow();
+   //DrawArrow();
 }
 
 void AbilityMenu::NextOption()

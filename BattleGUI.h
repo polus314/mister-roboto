@@ -17,7 +17,9 @@ private:
       float HB_H;
       HealthBar() : HB_W(100.0f), HB_H(20.0f) {}
       HealthBar(RenderWindow* w, Robot* r, Font* f, float _x, float _y);
+      void Update();
       float x, y;
+      Robot* robot;
       RectangleShape hbOutline, health, xp;
       Text name, level;
       RenderWindow* win;
@@ -29,6 +31,7 @@ private:
    Sprite ubSprite, obSprite;
    HealthBar uBar, oBar;
    Font* font;
+   void Update();
 };
 
 #endif

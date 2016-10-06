@@ -10,12 +10,19 @@
 #define CHARACTER_H
 
 #include "Robot.h"
-#include "PickUp.h"
+#include "Item.h"
+#include "Backpack.h"
 
 class Character
 {
 public:
    static const int baseSaveChars = 20;
+
+   //--------------------------------------------------------------------------
+   // Enumeration of directions character can move or face
+   //--------------------------------------------------------------------------
+   enum class Direction { LEFT, RIGHT, UP, DOWN };
+
    //--------------------------------------------------------------------------
    // Constructors
    //--------------------------------------------------------------------------
@@ -34,26 +41,29 @@ public:
    int getX() { return xCoord; }
    int getY() { return yCoord; }
    Robot* getRobot(int);
-   PickUp* GetItem(int index);
+   Item& GetItem(int index);
+   int GetItemCount(int index);
+   Direction getDirFacing() { return facing; }
+   int getInventorySize() const { return inventory.size(); }
 
    //--------------------------------------------------------------------------
    // Change coordinates by one unit
    //--------------------------------------------------------------------------
-   void increaseX() { xCoord++; }
-   void increaseY() { yCoord++; }
-   void decreaseX() { xCoord--; }
-   void decreaseY() { yCoord--; }
+   void increaseX() { xCoord++; facing = Direction::RIGHT; }
+   void increaseY() { yCoord++; facing = Direction::DOWN; }
+   void decreaseX() { xCoord--; facing = Direction::LEFT; }
+   void decreaseY() { yCoord--; facing = Direction::UP; }
 
    //--------------------------------------------------------------------------
    // Adds the given item to the character's inventory
    //--------------------------------------------------------------------------
-   void AcquireItem(PickUp* item);
+   bool AcquireItem(Item& item);
 
    //--------------------------------------------------------------------------
    // Removes and returns the item found at the given index in the character's
    // inventory
    //--------------------------------------------------------------------------
-   PickUp* RemoveItem(int index);
+   bool RemoveItem(int index);
 
    //--------------------------------------------------------------------------
    // Adds the given robot to the character's team
@@ -63,7 +73,7 @@ public:
    //--------------------------------------------------------------------------
    // Returns true if character cannot hold any more items
    //--------------------------------------------------------------------------
-   bool PackIsFull() { return itemCount >= 9; }
+   bool PackIsFull() { return inventory.isFull(); }
 
    //--------------------------------------------------------------------------
    // Returns a string that contains all data needed to reproduce this 
@@ -71,12 +81,19 @@ public:
    //--------------------------------------------------------------------------
    string GetSaveData() const;
 
+   //--------------------------------------------------------------------------
+   // Sets the character to be facing this direction
+   //--------------------------------------------------------------------------
+   void turn(Direction d) { facing = d; }
+
 private:
    bool playable;
-   int xCoord, yCoord, itemCount, botCount;
-   PickUp* inventory[10];
+   int xCoord, yCoord;
+   int botCount;
+   Backpack inventory;
    Robot* team[6];
-   string dialogue; 
+   string dialogue;
+   Direction facing;
 };
 
 
