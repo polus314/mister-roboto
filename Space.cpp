@@ -27,7 +27,7 @@ Space::Space(SpaceType t)
    }
 }
 
-void Space::placePickUp(Item& item)
+void Space::placePickUp(const Item& item)
 {
    pickUp = Item(item);
    solid = true;
@@ -40,7 +40,7 @@ bool Space::removePickUp()
    return true;
 }
 
-const Item& Space::getItem() const
+Item Space::getItem() const
 {
    return pickUp;
 }

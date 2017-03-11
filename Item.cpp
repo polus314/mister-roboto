@@ -12,6 +12,7 @@ Item::Item()
    type = Item::ItemType::GARBAGE;
    value = 0;
    count = 1;
+   strength = 0;
    obtainable = true;
 }
 
@@ -24,73 +25,108 @@ Item::Item(ItemType t, int num)
    {
       case ItemType::GARBAGE :
          value = 0;
+         strength = 0;
          break;
       case ItemType::POTION : 
          value = 10;
+         strength = 50;
          break;
       case ItemType::SHIELD :
          value = 50;
-         break;
-      case ItemType::SWORD :
-         value = 100;
+         strength = 100;
          break;
       case ItemType::WORKBENCH :
          value = 250;
          obtainable = false;
+         strength = 0;
+         break;
+      default:
+         value = 10;
+         strength = 10;
+         obtainable = true;
          break;
    }
 }
 
 
-string Item::GetSaveData() const
+string Item::getSaveData() const
 {
    string info;
    info.append(ItemTypeToSaveString(type));
    info.append(SaveIntToStr(count));
    info.append(SaveIntToStr(value));
-   info.append(obtainable ? "t" : "f");
+   info.append(SaveIntToStr(strength));
+   info.append(obtainable ? "true" : "flse");
    return info;
 }
 
-void Item::LoadFromSaveData(string info)
+bool Item::loadFromSaveData(const string& info)
 {
-   type = SaveStringToItemType(info.substr(0, 6));
-   count = stoi(info.substr(6, 4));
-   value = stoi(info.substr(10, 4));
-   obtainable = info.substr(14, 1) == "t" ? true : false;
+   try
+   {
+      type = SaveStringToItemType(info.substr(0, 8));
+      count = stoi(info.substr(8, 4));
+      value = stoi(info.substr(12, 4));
+      strength = stoi(info.substr(16, 4));
+      obtainable = info.substr(20, 4) == "true";
+   }
+   catch(...)
+   {
+      return false;
+   }
+   return true;
 }
 
 string Item::ItemTypeToSaveString(ItemType it)
 {
    switch(it)
    {
-      case ItemType::SWORD : return "sword-";
-      case ItemType::POTION : return "potion";
-      case ItemType::SHIELD : return "shield";
+      case ItemType::FLAMETHROWER : return "flmthrwr";
+      case ItemType::POTION : return "potion--";
+      case ItemType::SHIELD : return "shield--";
+      case ItemType::SLEDGEHAMMER : return "sldghamr";
+      case ItemType::TURRET : return "turret--";
+      case ItemType::WORKBENCH : return "wrkbench";
+      case ItemType::GARBAGE : return "garbage-";
    }
-   
-   return "fixmepls";
+   return "FIXMEPLS";
 }
 
-Item::ItemType Item::SaveStringToItemType(string typeStr)
+Item::ItemType Item::SaveStringToItemType(const string& typeStr)
 {
-   if(typeStr == "sword-")
-      return ItemType::SWORD;
-   else if(typeStr == "potion")
+   if(typeStr == "flmthrwr")
+      return ItemType::FLAMETHROWER;
+   if(typeStr == "potion--")
       return ItemType::POTION;
-   else //if(typeStr == "shield")
+   if(typeStr == "shield--")
       return ItemType::SHIELD;
+   if(typeStr == "flmthrwr")
+      return ItemType::FLAMETHROWER;
+   if(typeStr == "sldghamr")
+      return ItemType::SLEDGEHAMMER;
+   if(typeStr == "wrkbench")
+      return ItemType::WORKBENCH;
+   //if(typeStr == "garbage-")
+   return ItemType::GARBAGE;
 }
 
 string Item::toString() const
 {
+   string name;
    switch(type)
    {
-      case ItemType::SWORD : return "Sword x " + to_string(count);
-      case ItemType::POTION : return "Potion x " + to_string(count);
-      case ItemType::SHIELD : return "Shield x " + to_string(count);
+      case ItemType::FLAMETHROWER :    name = "Flamethrower"; break;
+      case ItemType::POTION :          name = "Potion"; break;
+      case ItemType::SHIELD :          name = "Shield"; break;
+      case ItemType::SLEDGEHAMMER :    name = "Sledgehammer"; break;
+      case ItemType::TURRET :          name = "Turret"; break;
+      case ItemType::WORKBENCH :       return "Workbench";
+      case ItemType::GARBAGE :         return "Garbage";
    }
-   return "fixmepls";
+   //return string(name + " x " + to_string(count));
+   if(count > 1)
+      name.append("s");
+   return name;
 }
 
 bool Item::operator==(const Item& rhs) const

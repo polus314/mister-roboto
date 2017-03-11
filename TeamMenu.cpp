@@ -7,79 +7,107 @@
 #include "stdafx.h"
 #include "TeamMenu.h"
 
-TeamMenu::TeamMenu(RenderWindow* w, Character* _trainer, float _x, float _y)
-   : GameMenu(w, _x, _y)
+TeamMenu::TeamMenu(RenderWindow &w, const Character& _trainer, float _x, float _y)
+   : GameMenu(w, _x, _y), infoGUI(w, _trainer.getRobot(0), font, _x + 200.0f, _y),
+      trainer(_trainer)
 {
-   trainer = _trainer;
-   
-   selIndex = count = 0;
-   Robot* bot = trainer->getRobot(count);
-   while(bot != NULL)
+   swapIndex = -1;
+   Robot bot = trainer.getRobot(count);
+   while(bot != Robot())
    {
-      options[count] = GMenuItem(String(bot->getName()), &font);
+      options[count] = GMenuItem(bot.getName(), font);
       options[count].setPosition(_x + 50.0f, _y + float(25 + count * 50));
       count++;
-      bot = trainer->getRobot(count);
+      bot = trainer.getRobot(count);
    }
-   options[count] = GMenuItem(String("Exit"), &font);
+   options[count] = GMenuItem("Exit", font);
    options[count].setPosition(_x + 50.0f, _y + float(25 + count * 50));
-   bgRects[0] = RectangleShape(Vector2f(500.0f, 500.0f));
-   bgRects[0].setPosition(_x, _y);
-   options[0].select();
+   count++;
+   setUpBackground(500.0f, 500.0f);
+
+   setRobotSprites();
 }
 
 
-void TeamMenu::Draw()
+void TeamMenu::draw()
 {
-   /*g->FillRectangle(backBrush, 0, 0, 500, 500);
-   g->DrawString("Team of Pokemon", otherFont, regBrush, 10, 10);
-   for(int i = 0; i < count; i++)
+   drawBackground();
+   for(int i = 0; i < count - 1; i++)
    {
-      g->DrawImageUnscaled(trainer->getRobot(i)->getSprite(), 200, 70 * (i + 1));
-      g->DrawString(options[i].getText(), otherFont, regBrush, 50, float(70 * (i + 1)));
+      win.draw(team[i]);
+      win.draw(options[i].getText());
    }
-   g->DrawString(options[count].getText(), otherFont, regBrush, 50, float(70 * (count + 1)));*/
-   // TODO - redo this
-   win->draw(bgRects[0]);
-   sf::Sprite pokemon;
-   sf::Texture texture;
-   texture.loadFromFile("Graphics/blackrobot.bmp");
-   pokemon.setTexture(texture);
-   for(int i = 0; i < count; i++)
-   {
-      pokemon.setPosition(float(x + 10), float(y + 10 + 50 * i));
-      win->draw(pokemon);
-      win->draw(*options[i].getText());
-   }
-   win->draw(*options[count].getText());
-   DrawArrow();
+   win.draw(options[count - 1].getText());
+   infoGUI.draw();
 }
 
-void TeamMenu::NextOption()
+void TeamMenu::nextOption()
 {
    options[selIndex].deselect();
-   if(++selIndex > count)
+   if(++selIndex >= count)
       selIndex = 0;
    options[selIndex].select();
+   if(selIndex < count - 1)
+      infoGUI = BotInfoGUI(win, trainer.getRobot(selIndex), font);
 }
 
-void TeamMenu::PreviousOption()
+void TeamMenu::previousOption()
 {
    options[selIndex].deselect();
    if(--selIndex < 0)
       selIndex = count - 1;
    options[selIndex].select();
+   if(selIndex < count - 1)
+      infoGUI = BotInfoGUI(win, trainer.getRobot(selIndex), font);
 }
 
-MenuCommand* TeamMenu::EnterSelection()
+
+MenuCommand TeamMenu::enterSelection()
 {
-   return new MenuCommand();
+   if(selIndex == count - 1)
+      return MenuCommand(MenuCommand::Function::EXIT_MENU);
+   else if(swapIndex != -1)
+      return MenuCommand(new pair<int, int>(swapIndex, selIndex), MenuCommand::Function::SWAP_ROBOTS);
+   else
+   {
+      swapIndex = selIndex;
+      options[selIndex].setStandardColor(Color::Blue);
+      return MenuCommand(MenuCommand::Function::NONE);
+   }
 }
 
-void TeamMenu::DrawArrow()
+void TeamMenu::refresh()
 {
-   float xPos = 25.0f;
-   float yPos = float(selIndex * 70 + 70);
-   arrow.setPosition(xPos, yPos);
+   swapIndex = -1;
+   count = 0;
+   Robot bot = trainer.getRobot(count);
+   while(bot != Robot())
+   {
+      options[count] = GMenuItem(bot.getName(), font);
+      options[count].setPosition(x + 50.0f, y + float(25 + count * 50));
+      count++;
+      bot = trainer.getRobot(count);
+   }
+   count++; // "Exit"
+   infoGUI = BotInfoGUI(win, trainer.getRobot(selIndex), font);
+   options[selIndex].select();
+
+   setRobotSprites();
 }
 
+void TeamMenu::setRobotSprites()
+{
+   for(int i = 0; i < count - 1; i++)
+   {
+      string robotName = trainer.getRobot(i).getName();
+      if(robotName == "Alpha")
+         teamTex[i].loadFromFile("Graphics/blackrobot.png");
+      else if(robotName == "Bravo")
+         teamTex[i].loadFromFile("Graphics/bluerobot.png");
+      else
+         teamTex[i].loadFromFile("Graphics/orangerobot.png");
+         
+      team[i].setTexture(teamTex[i]);
+      team[i].setPosition(x, y + 10.0f + float(50.0f * i));
+   }
+}

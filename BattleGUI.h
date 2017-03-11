@@ -6,32 +6,40 @@
 class BattleGUI
 {
 public:
-   BattleGUI() {}
-   BattleGUI(RenderWindow* w, Robot* user, Robot* other, Font* f);
+   BattleGUI(RenderWindow &w, const Robot& user, const Robot& other, const Font& f);
    void drawBattleScene();
+
+   BattleGUI& operator=(const BattleGUI& rhs);
  
 private:
    struct HealthBar
    {
-      float HB_W;
-      float HB_H;
-      HealthBar() : HB_W(100.0f), HB_H(20.0f) {}
-      HealthBar(RenderWindow* w, Robot* r, Font* f, float _x, float _y);
-      void Update();
+      float HB_W;    // Health Bar Width
+      float HB_H;    // Health Bar Height
+      HealthBar(RenderWindow &w, const Robot& r, const Font& f, float _x, float _y);
+      void update();
+      void draw();
       float x, y;
-      Robot* robot;
+      const Robot &robot;
       RectangleShape hbOutline, health, xp;
-      Text name, level;
-      RenderWindow* win;
-      Font* font;
+      Text name, level, healthInNumbers;
+      RenderWindow &win;
+      const Font &font;
    };
 
-   Robot *ub, *ob;
-   RenderWindow* win;
+   const Robot &ub, &ob;
+   RenderWindow &win;
    Sprite ubSprite, obSprite;
+   Texture ubTex, obTex;
    HealthBar uBar, oBar;
-   Font* font;
-   void Update();
+   const Font &font;
+   RectangleShape fade;
+   bool doingAnimation;
+
+   Vector2f USER_BOT_POS;
+   Vector2f OTHER_BOT_POS;
+
+   void doBotAnimation();
 };
 
 #endif

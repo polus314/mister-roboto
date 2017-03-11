@@ -12,18 +12,21 @@
 #include "GameMenu.h"
 #include "TeamMenu.h"
 #include "ItemMenu.h"
+#include "KeyLayoutMenu.h"
+#include "AudioMenu.h"
 
 class StartMenu : public GameMenu
 {
 public:
-   StartMenu(RenderWindow*, Character*, float _x = 375.0f, float _y = 0.0f);
-   MenuCommand* EnterSelection();
-   void Draw();
+   StartMenu(RenderWindow &w, const Character &c, const KeyBinder& kb, int volume = 100, float _x = MR::WIN_WIDTH - 125.0f, float _y = 0.0f);
+   MenuCommand enterSelection();
+   void draw();
+   void updateVolume(int newVolume) { currentVolume = newVolume; }
 
 private:
-   Character* trainer;
-   void DrawArrow();
-   
+   const Character &trainer;
+   const KeyBinder &keyBinder;
+   int currentVolume;
 };
 
 

@@ -5,10 +5,6 @@
 //          creatures that appear in the wild but can also be built or captured
 //          and used for personal protection. Robots have a set of abilities
 //          and stats that determine how effective they are in battle.
-//
-// Created: 2/6/2016
-//
-// Changed: 3/7/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef ROBOT_H
@@ -19,8 +15,8 @@
 class Robot
 {
 public:
-   static const int saveChars = 72;
-   static const int statusSaveChars = 4;
+   static const int SAVE_CHARS = 72;
+   static const int STATUS_SAVE_CHARS = 4;
    //--------------------------------------------------------------------------
    // Enumerates the different states of "healthiness" that a robot can have
    //--------------------------------------------------------------------------
@@ -37,7 +33,7 @@ public:
    //--------------------------------------------------------------------------
    // Returns the status for the given 4 character long string
    //--------------------------------------------------------------------------
-   static Status LoadStrToSts(string statusStr);
+   static Status LoadStrToSts(const string& statusStr);
 
    //--------------------------------------------------------------------------
    // Enumerates all the different robots that occur in this game
@@ -46,7 +42,7 @@ public:
    { 
       ALPHA = 1, BRAVO, CHARLIE, DELTA, ECHO, FOXTROT, GULF, HOTEL, INDIA, 
       JULIETTE, KILO, LIMA, MIKE, NOVEMBER, OSCAR, PAPA, QUEBEC, ROMEO, SIERRA,
-      TANGO, UNIFORM, VICTOR, WHISKEY, XRAY, YANKEE, ZULU
+      TANGO, UNIFORM, VICTOR, WHISKEY, XRAY, YANKEE, ZULU, MIA
    };
 
    //--------------------------------------------------------------------------
@@ -57,26 +53,29 @@ public:
 
    //--------------------------------------------------------------------------
    // Used to load this robot from a save file
+   // Returns true if load is successful, false otherwise
    //--------------------------------------------------------------------------
-   void LoadFromSaveData(string info);
+   bool loadFromSaveData(const string& info);
 
    //--------------------------------------------------------------------------
    // Getter methods
    //--------------------------------------------------------------------------
-   string getName() { return name; }
-   Ability* getMove(int index) { return moves[index]; }
-   Ability::Type getType1() { return type1; }
-   Ability::Type getType2() { return type2; }
-   int GetAttack() { return attack; }
-   int GetSpeed() { return speed; }
-   int GetLevel() { return level; }
-   float GetPctHealth() { float pct = float(health) / float(maxHealth); return pct; }
-   int GetHealth() { return health; }
-   int GetMaxHealth() { return maxHealth; }
-   Status GetStatus() { return status; }  
+   string         getName() const { return name; }
+   Ability        getMove(int index) const { return moves[index]; }
+   Ability::Type  getType1() const { return type1; }
+   Ability::Type  getType2() const { return type2; }
+   int            getAttack() const { return attack; }
+   int            getSpeed() const { return speed; }
+   int            getDefense() const { return defense; }
+   int            getLevel() const { return level; }
+   float          getPctHealth() const { float pct = float(health) / float(maxHealth); return pct; }
+   int            getHealth() const { return health; }
+   int            getMaxHealth() const { return maxHealth; }
+   int            getXP() const { return exp; }
+   Status         getStatus() const { return status; }
 
    //--------------------------------------------------------------------------
-   // Reduces current health proportionally to the given amount, minimum
+   // Reduces current health proportionally to the given amount, minimum health
    // being 0
    //--------------------------------------------------------------------------
    void takeDamage(int atkStrength);
@@ -84,41 +83,40 @@ public:
    //--------------------------------------------------------------------------
    // Changes status according to the given effect
    //--------------------------------------------------------------------------
-   void ChangeStatus(Ability::Effect effect);
+   void changeStatus(Ability::Effect effect);
 
    //--------------------------------------------------------------------------
    // Increases attack power by the given amount
    //--------------------------------------------------------------------------
-   void BuffAttack(int amt);
+   void buffAttack(int amt);
 
    //--------------------------------------------------------------------------
    // Restores current health by the given amount, maximum being maxHealth
    //--------------------------------------------------------------------------
-   void Heal(int amt);
+   void heal(int amt);
 
    //--------------------------------------------------------------------------
    // Increases total experience by the given amount. Also, levels up robot if
    // necessary threshold is passed
    //--------------------------------------------------------------------------
-   void EarnExp(int xp);
+   void earnExp(int xp);
 
    //--------------------------------------------------------------------------
    // Returns all the info needed to reproduce this robot when it needs to be
    // reloaded later
    //--------------------------------------------------------------------------
-   string GetSaveData();
+   string getSaveData() const;
 
-   //--------------------------------------------------------------------------
-   // Parses data from given string to load robot
-   //--------------------------------------------------------------------------
-   void Update(string info);
+   bool operator==(const Robot& rhs) const;
+
+   bool operator!=(const Robot& rhs) const;
 
 private:
    int health, maxHealth, exp, level;
    int attack, defense, special, speed;
    Status status;
-   Ability* moves[4];
-   Robot::ID id;
+   Ability moves[4];
+   ID id;
    Ability::Type type1, type2;
    string name;
 
@@ -126,13 +124,13 @@ private:
    // Reads in data from a csv file to construct a new robot that has the given
    // ID number
    //--------------------------------------------------------------------------
-   void ReadInData(int idNo);
+   void readInData(int idNo);
 
    //--------------------------------------------------------------------------
    // Increments robot's level as well as increasing stats and checking for new
    // abilities to learn
    //--------------------------------------------------------------------------
-   void LevelUp();
+   void levelUp();
 
 };
 

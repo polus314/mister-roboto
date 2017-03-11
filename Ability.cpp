@@ -1,11 +1,7 @@
 //-----------------------------------------------------------------------------
 // Project: Mister Roboto
 // 
-// Purpose: This file implements the methods declared in Ability.h
-//
-// Created: 2/6/2016
-//
-// Changed: 3/14/2016 
+// Purpose: This file implements the methods declared in Ability.h 
 //-----------------------------------------------------------------------------
 
 #include "stdafx.h"
@@ -21,7 +17,7 @@ Ability::Ability()
 }
 
 
-Ability::Ability(string _name, int str)
+Ability::Ability(const string& _name, int str)
 {
    name = _name;
    type = Type::FAST;
@@ -30,7 +26,7 @@ Ability::Ability(string _name, int str)
    strength1 = str;
 }
 
-Ability::Ability(string _name, Effect eff1, int str1, Effect eff2, int str2, Ability::Type _type)
+Ability::Ability(const string& _name, Effect eff1, int str1, Effect eff2, int str2, Ability::Type _type)
 {
    name = _name;
    type = _type;
@@ -66,7 +62,7 @@ Ability::Type Ability::TypeFromStr(const string& typeName)
       return Ability::Type::NONE;
 }
 
-string Ability::GetSaveData() const
+string Ability::getSaveData() const
 {
    return "ability-"; //TODO FIX THIS
 }
@@ -90,7 +86,7 @@ string Ability::SaveTypeToStr(Type t)
    return "fxme";
 }
 
-void Ability::LoadFromSaveData(const string& info)
+void Ability::loadFromSaveData(const string& info)
 {
    if(info == "ability-")
    {
@@ -98,4 +94,33 @@ void Ability::LoadFromSaveData(const string& info)
    }
 
    // TODO - read from a database
+}
+
+string Ability::TypeToString(Type t)
+{
+   switch(t)
+   {
+      case Type::ACCURATE : return "Accurate";
+      case Type::ALUMINUM : return "Aluminum";
+      case Type::CARBON_FIBER : return "Carbon Fiber";
+      case Type::CAST_IRON : return "Cast Iron";
+      case Type::FAST : return "Fast";
+      case Type::NONE : return "None";
+      case Type::STAINLESS_STEEL : return "Stainless Steel";
+      case Type::STEEL : return "Steel";
+      case Type::STRONG : return "Strong";
+      case Type::TECH : return "Tech";
+      case Type::TOUGH : return "Tough";
+   }
+   return "Fix Me";
+}
+
+bool Ability::operator==(const Ability& rhs) const
+{
+   return rhs.name == this->name && rhs.type == this->type;
+}
+
+bool Ability::operator!=(const Ability& rhs) const
+{
+   return !(*this == rhs);
 }

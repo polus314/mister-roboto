@@ -36,7 +36,7 @@ public:
    //--------------------------------------------------------------------------
    // Returns type of space at coordinates
    //--------------------------------------------------------------------------
-   Space::SpaceType getType(int x, int y) const { return squares[x][y].GetType(); }
+   Space::SpaceType getType(int x, int y) const { return squares[x][y].getType(); }
 
    //--------------------------------------------------------------------------
    // Returns true if space contains an item that can be picked up
@@ -46,7 +46,7 @@ public:
    //--------------------------------------------------------------------------
    // Places an item on the map at the given location
    //--------------------------------------------------------------------------
-   void placePickUp(Item& item, int x, int y);
+   void placePickUp(const Item& item, int x, int y);
 
    //--------------------------------------------------------------------------
    // Removes the item from the given space on the map
@@ -57,7 +57,7 @@ public:
    //--------------------------------------------------------------------------
    // Returns the item at the given coordinates
    //--------------------------------------------------------------------------
-   const Item& getItem(int x, int y) const;
+   Item getItem(int x, int y) const;
 
 private:
    Space squares[MAX_HEIGHT][MAX_WIDTH];

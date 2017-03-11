@@ -10,7 +10,7 @@
 
 #include <SFML\Audio.hpp>
 
-enum class MusicType { MAIN_MENU, ROAMING };
+enum class MusicType { MAIN_MENU, ROAMING, FIGHTING };
 
 class SoundFX
 {
@@ -36,11 +36,24 @@ public:
    //--------------------------------------------------------------------------
    void playMusic(MusicType m);
 
+   //--------------------------------------------------------------------------
+   // Sets the volume of all music and sounds played. Value passed is
+   // interpreted as a percentage, from 0 to 100.
+   //--------------------------------------------------------------------------
+   void setVolume(int vol);
+
+   //--------------------------------------------------------------------------
+   // Returns the volume of all music and sounds played. Value returned
+   // represents the volume as a percentage, from 0 to 100.
+   //--------------------------------------------------------------------------
+   int getVolume() const;
+
 private:
    Music music;
    SoundBuffer buf[5];
    Sound sounds[5];
-   
+
+   float currentVolume;
 };
 
 

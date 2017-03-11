@@ -1,42 +1,72 @@
 #include "stdafx.h"
 #include "BattleGUI.h"
 
-BattleGUI::BattleGUI(RenderWindow* w, Robot* user, Robot* other, Font* f)
-   : uBar(w, user, f, 325.0f, 325.0f), oBar(w, other, f, 25.0f, 10.0f)
+BattleGUI::BattleGUI(RenderWindow &w, const Robot& user, const Robot& other, const Font &f)
+   : uBar(w, user, f, MR::WIN_WIDTH - 225.0f, MR::WIN_HEIGHT - 175.0f), 
+     oBar(w, other, f, 25.0f, 10.0f), ub(user), ob(other), win(w), font(f)
 {
-   win = w;
-   ub = user;
-   ob = other;
-   font = f;
+   doingAnimation = true;
+   USER_BOT_POS = Vector2f(50.0f, MR::WIN_HEIGHT - 275.0f);
+   OTHER_BOT_POS = Vector2f(MR::WIN_WIDTH - 300.0f, 10.0f);
+   fade = RectangleShape(Vector2f(MR::WIN_WIDTH, MR::WIN_HEIGHT));
+   Color myColor = Color::Black;
+   myColor.a = 128;
+   fade.setFillColor(myColor);
+
+   bool success = ubTex.loadFromFile("Graphics/blackrobot.png");
+   success = obTex.loadFromFile("Graphics/bluerobot.png");
+   ubSprite.setTexture(ubTex);
+   obSprite.setTexture(obTex);
+   ubSprite.setPosition(MR::WIN_WIDTH, USER_BOT_POS.y);
+   obSprite.setPosition(OTHER_BOT_POS.x - 50.0f - MR::WIN_WIDTH, OTHER_BOT_POS.y);
+   ubSprite.setScale(MR::WIN_WIDTH / 125.0f, MR::WIN_HEIGHT / 125.0f);
+   obSprite.setScale(MR::WIN_WIDTH / 125.0f, MR::WIN_HEIGHT / 125.0f);
 }
 
 void BattleGUI::drawBattleScene()
 {
-   Update();
-   HealthBar* bar = &uBar;
-   for(int i = 0; i < 2; i++)
+   if(doingAnimation)
    {
-      win->draw(bar->level);
-      win->draw(bar->name);
-      win->draw(bar->hbOutline);
-      win->draw(bar->health);
-      win->draw(bar->xp);
-
-      bar = &oBar;
+      win.draw(fade);
+      doBotAnimation();
    }
-   // TODO - Draw Robots
+   else
+   {
+      oBar.update();
+      uBar.update();
+      oBar.draw();
+      uBar.draw();
+   }
+   win.draw(obSprite);
+   win.draw(ubSprite);
 }
 
-BattleGUI::HealthBar::HealthBar(RenderWindow* w, Robot* r, Font* f, float _x, float _y)
+void BattleGUI::HealthBar::draw()
+{
+   win.draw(level);
+   win.draw(name);
+   win.draw(hbOutline);
+   win.draw(health);
+   win.draw(xp);
+   win.draw(healthInNumbers);
+}
+
+
+
+BattleGUI::HealthBar::HealthBar(RenderWindow &w, const Robot& r, const Font& f, float _x, float _y)
    : x(_x), y(_y), HB_W(100.0f), HB_H(20.0f), win(w), font(f), robot(r)
 {
-   name = Text(String(r->getName()), *f);
+   name = Text(String(robot.getName()), f);
    name.setColor(Color::Black);
    name.setPosition(_x, _y);
 
-   level = Text(String(to_string(r->GetLevel())), *f); // TODO - this probably doesn't work
+   level = Text(String(to_string(robot.getLevel())), f);
    level.setColor(Color::Black);
    level.setPosition(_x + 100.0f, _y);
+
+   healthInNumbers = Text(to_string(robot.getHealth()) + "/" + to_string(robot.getMaxHealth()), f);
+   healthInNumbers.setColor(Color::Black);
+   healthInNumbers.setPosition(_x + 100.0f, _y + 25.0f);
    
    hbOutline = RectangleShape(Vector2f(HB_W, HB_H));
    hbOutline.setPosition(_x, _y + 40.0f);
@@ -53,21 +83,51 @@ BattleGUI::HealthBar::HealthBar(RenderWindow* w, Robot* r, Font* f, float _x, fl
    xp.setFillColor(Color::Blue);
 }
 
-void BattleGUI::HealthBar::Update()
+void BattleGUI::HealthBar::update()
 {
-   health.setSize(Vector2f((HB_W - 4.0f) * robot->GetPctHealth(), HB_H - 4.0f));
-   if(robot->GetPctHealth() < .25f)
+   healthInNumbers.setString(to_string(robot.getHealth()) + "/" + to_string(robot.getMaxHealth()));
+
+   float pctHealth = robot.getPctHealth();
+   health.setSize(Vector2f((HB_W - 4.0f) * pctHealth, HB_H - 4.0f));
+   if(pctHealth < .25f)
       health.setFillColor(Color::Red);
-   else if(robot->GetPctHealth() < .5f)
+   else if(pctHealth < .5f)
       health.setFillColor(Color::Yellow);
    else
       health.setFillColor(Color::Green);
-   level.setString(to_string(robot->GetLevel()));
-   // TODO - xp bar as well
+   level.setString(to_string(robot.getLevel()));
+
+   int exp = robot.getXP();
+   int xpTowardNextLevel;
+   if(exp > 100 * 100)
+      xpTowardNextLevel = 100;
+   else
+      xpTowardNextLevel = exp % 100;
+   float xpX = hbOutline.getSize().x * float(xpTowardNextLevel) / 100;
+   xp.setSize(Vector2f(xpX, xp.getSize().y));
 }
 
-void BattleGUI::Update()
+void BattleGUI::doBotAnimation()
 {
-   uBar.Update();
-   oBar.Update();
+   float step = 8.0f;
+   if(obSprite.getPosition().x < OTHER_BOT_POS.x - step)
+      obSprite.move(step, 0.0f);
+   else       
+      obSprite.setPosition(OTHER_BOT_POS);
+              
+   if(ubSprite.getPosition().x > USER_BOT_POS.x + step)
+      ubSprite.move(-step, 0.0f);
+   else
+      ubSprite.setPosition(USER_BOT_POS);
+
+   if(ubSprite.getPosition() == USER_BOT_POS &&
+      obSprite.getPosition() == OTHER_BOT_POS)
+      doingAnimation = false;
+}
+
+BattleGUI& BattleGUI::operator=(const BattleGUI& rhs)
+{ 
+   if(this != &rhs) *
+      this = BattleGUI(rhs); 
+   return *this; 
 }

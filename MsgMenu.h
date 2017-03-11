@@ -6,15 +6,35 @@
 class MsgMenu : public GameMenu
 {
 public:
-   MsgMenu(RenderWindow* w, float _x, float _y, string msg);
-   void Draw();
-   void NextOption();
-   void PreviousOption();
-   MenuCommand* EnterSelection();
+   static const int DRAW_DELAY = 60;
+
+   MsgMenu(RenderWindow &w, float _x, float _y, const string& msg);
+   void draw();
+   void nextOption();
+   void previousOption();
+   MenuCommand enterSelection();
 private:
+   string text;
    Text message;
-   int counter;
-   bool increasing;
+   int textIndex;
+   bool atEndOfText;
+   int drawCount;
+   CircleShape arrow;
+
+   //--------------------------------------------------------------------------
+   // Updates message to show the next page's-worth of characters from text.
+   // If already at the end of text, does nothing. Sets atEndOfText based on
+   // where textIndex after getting the next page.
+   //--------------------------------------------------------------------------
+   void getNextPage();
+
+   //--------------------------------------------------------------------------
+   // Iterates through the text to find a place that will maximize the line
+   // length without overrunning the boundaries and breaking at a whitespace
+   // character.
+   // Returns the index of where to break the current line
+   //--------------------------------------------------------------------------
+   int findGoodLineBreak(int start);
 };
 
 

@@ -32,7 +32,7 @@ GameMap::GameMap()
    }
 }
 
-void GameMap::placePickUp(Item& item, int x, int y)
+void GameMap::placePickUp(const Item& item, int x, int y)
 {
    squares[x][y].placePickUp(item);
 }
@@ -50,7 +50,7 @@ bool GameMap::isSolid(int x, int y) const
       return true;
 }
 
-const Item& GameMap::getItem(int x, int y) const
+Item GameMap::getItem(int x, int y) const
 {
    return squares[x][y].getItem();
 }

@@ -15,13 +15,12 @@
 class ItemMenu : public GameMenu 
 {
 public:
-   ItemMenu(RenderWindow*, Character*, float _x = 0.0f, float _y = 0.0f);
-   void Draw();
-   MenuCommand* EnterSelection();
+   ItemMenu(RenderWindow &w, const Character& c, float _x = 0.0f, float _y = 0.0f);
+   void draw();
+   MenuCommand enterSelection();
    
 private:
-   Character* trainer;
-   void DrawArrow();
+   const Character &trainer;
 };
 
 

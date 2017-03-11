@@ -7,17 +7,12 @@
 #include "stdafx.h"
 #include "Battle.h"
 
-Battle::Battle( Robot* uB, Robot* oB) :
-   userBot(uB), otherBot(oB)
+Battle::Battle(Robot& uB, Robot& oB) :
+   userBot(&uB), otherBot(&oB)
 { 
 }
 
-Battle::Battle() :
-   userBot(NULL), otherBot(NULL)
-{
-}
-
-string Battle::StsToStr(Robot::Status status)
+string Battle::stsToStr(Robot::Status status)
 {
    switch(status)
    {
@@ -34,9 +29,9 @@ string Battle::StsToStr(Robot::Status status)
 
 }
 
-void Battle::UseAbility(Ability* a, bool isUser)
+void Battle::useAbility(const Ability& a, bool isUser)
 {
-   Robot *attacker = NULL, *defender = NULL;
+   Robot *attacker, *defender;
    if(isUser)
    {
       attacker = userBot;
@@ -48,40 +43,40 @@ void Battle::UseAbility(Ability* a, bool isUser)
       defender = userBot;
    }
    int damage;
-   switch(a->getEffect1())
+   switch(a.getEffect1())
    {
       case Ability::Effect::DAMAGE :
-         damage = a->getStrength1() * attacker->GetAttack() / 100;
+         damage = a.getStrength1() * attacker->getAttack() / 100;
          defender->takeDamage(damage);
          break;
       case Ability::Effect::BUFF_ATK :
-         attacker->BuffAttack(a->getStrength1());
+         attacker->buffAttack(a.getStrength1());
          break;
       case Ability::Effect::RESTORE :
-         attacker->Heal(a->getStrength1());
+         attacker->heal(a.getStrength1());
          
    }
 
-   if(a->hasSecondEffect())
+   if(a.hasSecondEffect())
    {
-      switch(a->getEffect2())
+      switch(a.getEffect2())
       {
          case Ability::Effect::RESTORE :
-            attacker->Heal(a->getStrength2());
+            attacker->heal(a.getStrength2());
             break;
          case Ability::Effect::STS_CNFS :
          case Ability::Effect::STS_PRLZ :
          case Ability::Effect::STS_PSN :
          case Ability::Effect::STS_SLP :
-            if(rand() % 100 < a->getStrength2())
-               defender->ChangeStatus(a->getEffect2());
+            if(rand() % 100 < a.getStrength2())
+               defender->changeStatus(a.getEffect2());
             break;
       }
    }
 
 }
 
-bool Battle::IsSuperEffective(Ability::Type attack, Ability::Type pmType)
+bool Battle::isSuperEffective(Ability::Type attack, Ability::Type pmType)
 {
    switch(attack)
    {
@@ -93,78 +88,74 @@ bool Battle::IsSuperEffective(Ability::Type attack, Ability::Type pmType)
    return false;
 }
 
-Battle::State Battle::DoTurnEvents(Ability* userMove)
+Battle::State Battle::doTurnEvents(const Ability& userMove)
 {
    State state = State::CONTINUE;
-   Ability* compMove = otherBot->getMove(0);
-   if(userBot->GetSpeed() >= otherBot->GetSpeed())
+   Ability compMove = otherBot->getMove(0);
+   if(userBot->getSpeed() >= otherBot->getSpeed())
    {
-      UseAbility(userMove, true);
-      state = CheckForFainting();
+      useAbility(userMove, true);
+      state = checkForFainting();
       if(state != State::CONTINUE)
          return state;
 
-      UseAbility(compMove, false);
-      state = CheckForFainting();
+      useAbility(compMove, false);
+      state = checkForFainting();
       if(state != State::CONTINUE)
          return state;
    }
    else
    {
-      UseAbility(compMove, false);
-      state = CheckForFainting();
+      useAbility(compMove, false);
+      state = checkForFainting();
       if(state != State::CONTINUE)
          return state;
 
-      UseAbility(userMove, true);
-      state = CheckForFainting();
+      useAbility(userMove, true);
+      state = checkForFainting();
       if(state != State::CONTINUE)
          return state;
    }
-   DoPoisonDamage();
+   doPoisonDamage();
    return State::CONTINUE;
 }
 
-void Battle::DoPoisonDamage()
+void Battle::doPoisonDamage()
 {
-   if(userBot->GetStatus() == Robot::Status::POISONED)
-      userBot->takeDamage(int(userBot->GetMaxHealth() * 0.05));
-   if(otherBot->GetStatus() == Robot::Status::POISONED)
-      otherBot->takeDamage(int(otherBot->GetMaxHealth() * 0.05));
+   if(userBot->getStatus() == Robot::Status::POISONED)
+      userBot->takeDamage(int(userBot->getMaxHealth() * 0.05f));
+   if(otherBot->getStatus() == Robot::Status::POISONED)
+      otherBot->takeDamage(int(otherBot->getMaxHealth() * 0.05f));
 }
 
 
-Battle::State Battle::CheckForFainting()
+Battle::State Battle::checkForFainting()
 {
-   if(userBot->GetHealth() == 0)
+   if(userBot->getHealth() == 0)
       return State::USER_FAINTED;
-   if(otherBot->GetHealth() == 0)
+   if(otherBot->getHealth() == 0)
    {   
-      userBot->EarnExp(otherBot->GetLevel() * 100);
+      userBot->earnExp(otherBot->getLevel() * 100);
       return State::OPP_FAINTED;
    }
    return State::CONTINUE;
 }
 
 
-Battle::State Battle::DoTurnEvents(Item* item)
+Battle::State Battle::doTurnEvents(const Item& item)
 {
    State state = State::CONTINUE;
-   switch(item->GetType())
+   switch(item.getType())
    {
-      case Item::ItemType::SWORD : // TODO - fix this
-         if(ThrowPokeBall(item))
-            return State::OPP_CAUGHT;
-         break;    
       case Item::ItemType::POTION :
-         userBot->Heal(50);
+         userBot->heal(50);
          break;
    }
-   UseAbility(otherBot->getMove(0), false);
+   useAbility(otherBot->getMove(0), false);
    return state;
 }
 
-bool Battle::ThrowPokeBall(Item* item)
+bool Battle::throwPokeBall(const Item& item)
 {
    // TODO - if(masterBall) 
    //           return true; etc.
@@ -172,4 +163,14 @@ bool Battle::ThrowPokeBall(Item* item)
       return true;
    else
       return false;
+}
+
+Battle& Battle::operator=(const Battle& rhs)
+{
+   if(this != &rhs)
+   {
+      this->userBot = rhs.userBot;
+      this->otherBot = rhs.otherBot;
+   }
+   return *this;
 }

@@ -12,9 +12,10 @@ Character::Character(): xCoord(5), yCoord(5)
    dialogue = "Hi, my name is Slim Shady!";
    botCount = 0;
 
-   team[botCount++] = new Robot(Robot::ID::ALPHA);
-   for(int i = 1; i < 6; i++)
-      team[i] = NULL;
+   team[botCount++] = Robot(Robot::ID::ALPHA);
+   team[botCount++] = Robot(Robot::ID::BRAVO);
+   team[botCount++] = Robot(Robot::ID::CHARLIE);
+   team[botCount++] = Robot(Robot::ID::DELTA);
 }
 
 Character::Character(int x, int y)
@@ -24,47 +25,53 @@ Character::Character(int x, int y)
    dialogue = "I'm just Marshall Mathers";
    botCount = 0;
 
-   team[botCount++] = new Robot(Robot::ID::ALPHA);
-   for(int i = 1; i < 6; i++)
-      team[i] = NULL;
+   team[botCount++] = Robot(Robot::ID::ALPHA);
+   team[botCount++] = Robot(Robot::ID::BRAVO);
+   team[botCount++] = Robot(Robot::ID::CHARLIE);
 }
 
-Robot* Character::getRobot(int index)
+Robot Character::getRobot(int index) const
 {
-   if(index < 6 && team[index] != NULL)
+   if(index < MAX_ROBOTS && team[index] != Robot())
       return team[index];
    else
-      return NULL;
+      return Robot();
 }
 
-bool Character::AcquireItem(Item& item)
+bool Character::acquireItem(const Item& item)
 {
-   return inventory.AddItems(item);
+   return inventory.addItems(item);
 }
 
-Item& Character::GetItem(int index)
+Item Character::getItem(int index) const
 {
    return inventory.at(index);
 }
 
-int Character::GetItemCount(int index)
+int Character::getItemCount(int index) const
 {
    return inventory.countAt(index);
 }
 
 
-bool Character::RemoveItem(int index)
+bool Character::removeItemStack(int index)
 {
-   return inventory.RemoveItems(index, Backpack::MAX_STACK);
+   return inventory.removeItems(index, Backpack::MAX_STACK);
 }
 
-void Character::AcquireRobot(Robot* bot)
+bool Character::removeOneOfItem(int index)
 {
-   if(botCount < 6)
+   return inventory.removeItems(index, 1);
+}
+
+
+void Character::acquireRobot(const Robot& bot)
+{
+   if(botCount < MAX_ROBOTS)
       team[botCount++] = bot;
 }
 
-string Character::GetSaveData() const
+string Character::getSaveData() const
 {
    string info;
    info.append(SaveIntToStr(inventory.size()));
@@ -74,42 +81,75 @@ string Character::GetSaveData() const
    playable ? info.append("true") : info.append("flse");
 
    for(int i = 0; i < inventory.size(); i++)
-      info.append(inventory.peek(i).GetSaveData());
+      info.append(inventory.peek(i).getSaveData());
    for(int i = 0; i < botCount; i++)
-      info.append(team[i]->GetSaveData());
+      info.append(team[i].getSaveData());
    return info;
 }
 
-void Character::LoadFromSaveData(const string& info)
+bool Character::loadFromSaveData(const string& info)
 {
-   int dataLength = 4;
-   int runningOffset = 0;
-   int itemCount = stoi(info.substr(0, 4));
-   botCount = stoi(info.substr(runningOffset, dataLength));
-   runningOffset += dataLength;
-
-   xCoord = stoi(info.substr(runningOffset, dataLength));
-   runningOffset += dataLength;
-
-   yCoord = stoi(info.substr(runningOffset, dataLength));
-   runningOffset += dataLength;
-
-   playable = (info.substr(runningOffset, dataLength) == "true");
-   runningOffset += dataLength;
-
-   int offset = runningOffset;
-   for(int i = 0; i < itemCount; i++)
+   try
    {
-      inventory.AddItems(Item());
-      inventory.at(inventory.size()).LoadFromSaveData(info.substr(offset, Item::saveChars));
-      offset += Item::saveChars;
+      int dataLength = 4;
+      int runningOffset = 0;
+      int itemCount = stoi(info.substr(0, 4));
+      runningOffset += dataLength;
+
+      botCount = stoi(info.substr(runningOffset, dataLength));
+      runningOffset += dataLength;
+
+      xCoord = stoi(info.substr(runningOffset, dataLength));
+      runningOffset += dataLength;
+
+      yCoord = stoi(info.substr(runningOffset, dataLength));
+      runningOffset += dataLength;
+
+      playable = (info.substr(runningOffset, dataLength) == "true");
+      runningOffset += dataLength;
+
+      int offset = runningOffset;
+      for(int i = 0; i < itemCount; i++)
+      {
+         inventory.addItems(Item());
+         if(!inventory.at(inventory.size()).loadFromSaveData(info.substr(offset, Item::SAVE_CHARS)))
+            throw exception("Item loading failed");
+         offset += Item::SAVE_CHARS;
+      }
+      int id;
+      for(int j = 0; j < botCount; j++)
+      {
+         id = stoi(info.substr(offset, 4));
+         team[j] = Robot(Robot::ID(id));
+         if(!team[j].loadFromSaveData(info.substr(offset, Robot::SAVE_CHARS)))
+            throw exception("Robot loading failed");
+         offset += Robot::SAVE_CHARS;
+      }
    }
-   int id;
-   for(int j = 0; j < botCount; j++)
+   catch(...)
    {
-      id = stoi(info.substr(offset, 4));
-      team[j] = new Robot(Robot::ID(id));
-      team[j]->LoadFromSaveData(info.substr(offset, Robot::saveChars));
-      offset += Robot::saveChars;
+      return false;
+   }
+   return true;
+}
+
+bool Character::swapRobots(int first, int second)
+{
+   if(first >= MAX_ROBOTS || second >= MAX_ROBOTS ||
+      team[first] == Robot() || team[second] == Robot())
+      return false;
+
+   Robot temp = team[first];
+   team[first] = team[second];
+   team[second] = temp;
+   return true;
+}
+
+void Character::repairAllRobots()
+{
+   for(int i = 0; i < botCount; i++)
+   {
+      team[i].heal(9999);
+      team[i].changeStatus(Ability::Effect::RESTORE);
    }
 }

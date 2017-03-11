@@ -7,11 +7,9 @@
 #include "stdafx.h"
 #include "GameMenu.h"
 
-GameMenu::GameMenu(RenderWindow* w, float _x, float _y)
+GameMenu::GameMenu(RenderWindow &w, float _x, float _y)
+   : win(w), x(_x), y(_y)
 {
-   win = w;
-   x = _x;
-   y = _y;
    selIndex = count = 0;
    font.loadFromFile("Graphics/CENTAUR.TTF");
    arrow = RectangleShape(sf::Vector2f(15.0f, 5.0f));
@@ -20,7 +18,7 @@ GameMenu::GameMenu(RenderWindow* w, float _x, float _y)
    layout = Layout::TOP_TO_BOT;
 }
 
-void GameMenu::NextOption()
+void GameMenu::nextOption()
 {
    options[selIndex].deselect();
    if(++selIndex >= count)
@@ -28,7 +26,7 @@ void GameMenu::NextOption()
    options[selIndex].select();
 }
 
-void GameMenu::PreviousOption()
+void GameMenu::previousOption()
 {
    options[selIndex].deselect();
    if(--selIndex < 0)
@@ -36,7 +34,7 @@ void GameMenu::PreviousOption()
    options[selIndex].select();
 }
 
-void GameMenu::SetUpBackground(float width, float height)
+void GameMenu::setUpBackground(float width, float height)
 {
    bgRects[0] = RectangleShape(Vector2f(width, height));
    bgRects[0].setFillColor(Color::White);
@@ -53,8 +51,8 @@ void GameMenu::SetUpBackground(float width, float height)
    // size, color, position, outline
 }
 
-void GameMenu::DrawBackground()
+void GameMenu::drawBackground()
 {
-   win->draw(bgRects[0]);
-   win->draw(bgRects[1]);
+   win.draw(bgRects[0]);
+   win.draw(bgRects[1]);
 }

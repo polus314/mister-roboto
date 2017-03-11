@@ -6,10 +6,10 @@
 class WB_AttacksMenu : public GameMenu
 {
 public:
-   WB_AttacksMenu(RenderWindow* w, float _x, float _y);
+   WB_AttacksMenu(RenderWindow &w, float _x, float _y);
 
-   void Draw();
-   MenuCommand* EnterSelection();
+   void draw();
+   MenuCommand enterSelection();
 private:
 
 };

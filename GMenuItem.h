@@ -18,14 +18,14 @@ public:
    // Constructors
    //--------------------------------------------------------------------------
    GMenuItem() {}
-   GMenuItem(sf::String t, sf::Font* f, int size = 18);
+   GMenuItem(const string& t, const Font& f, int size = 18);
 
    //--------------------------------------------------------------------------
    // Getters
    //--------------------------------------------------------------------------
-   sf::Text* getText() { return &text; }
-   bool isHeader() { return header; }
-   bool isSelected() { return selected; }
+   Text getText() const { return text; }
+   bool isHeader() const { return header; }
+   bool isSelected() const { return selected; }
 
    //--------------------------------------------------------------------------
    // Setters
@@ -33,9 +33,12 @@ public:
    void select();
    void deselect();
    void setPosition(float x, float y) { text.setPosition(x,y); }
+   void setStandardColor(Color c);
+   void setText(const string& txt);
 
 private:
-   sf::Text text;
+   Text text;
+   Color stdColor;
    bool header;
    bool selected;
 };

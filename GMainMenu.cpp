@@ -7,79 +7,59 @@
 #include "stdafx.h"
 #include "GMainMenu.h"
 
-GMainMenu::GMainMenu(RenderWindow* w, float _x, float _y)
-   : GameMenu(w, _x, _y)
+GMainMenu::GMainMenu(RenderWindow &w, const KeyBinder& kb, float _x, float _y)
+   : GameMenu(w, _x, _y), keyBinder(kb)
 {
-   count = selIndex = 0;
-   bgRects[0] = RectangleShape(Vector2f(MR::WIN_WIDTH, MR::WIN_HEIGHT));  
-   bgRects[0].setPosition(_x, _y);
-   bgRects[0].setFillColor(Color::Blue);
-   title = Text(String("Robots!"), font, 70);
-   title.setPosition(50.0f, 50.0f);
+   title = Text(String("Mister Roboto"), font, 70);
+   title.setPosition(x + 5.0f, y + 50.0f);
    title.setColor(Color::Yellow);
-   options[count++] = GMenuItem(String("New Game"), &font, 30);
-   options[count++] = GMenuItem(String("Load Game"), &font, 30);
-   options[count++] = GMenuItem(String("Controls"), &font, 30);
-   options[count++] = GMenuItem(String("Quit"), &font, 30);
+   options[count++] = GMenuItem("New Game", font, 40);
+   options[count++] = GMenuItem("Load Game", font, 40);
+   options[count++] = GMenuItem("Controls", font, 40);
+   options[count++] = GMenuItem("Quit", font, 40);
 
    for(int i = 0; i < count; i++)
    {
-      options[i].setPosition(_x + 100.0f, _y + float(200 + i * 50));
+      options[i].setPosition(x + 5.0f, y + float(200 + i * 50));
+      options[i].setStandardColor(Color::White);
    }
    options[selIndex].select();
+
+   bgRects[0] = RectangleShape(Vector2f(400.0f, float(150 + count * 50)));  
+   bgRects[0].setPosition(x, y  + 45.0f);
+   Color bgColor = Color::Black;
+   bgColor.a = 200;
+   bgRects[0].setFillColor(bgColor);   
+
+   bgTex.loadFromFile("Graphics/RobotBackground.png", sf::IntRect(/*960 - MR::WIN_WIDTH, 0, MR::WIN_WIDTH, MR::WIN_HEIGHT*/));
+   bgImage.setTexture(bgTex);
 }
 
-
-void GMainMenu::NextOption()
+void GMainMenu::draw()
 {
-   options[selIndex].deselect();
-   if(++selIndex >= 4)
-      selIndex = 0;
-   options[selIndex].select();
-}
-
-void GMainMenu::PreviousOption()
-{
-   options[selIndex].deselect();
-   if(--selIndex < 0)
-      selIndex = 3;
-   options[selIndex].select();
-}
-
-void GMainMenu::Draw()
-{
-   win->draw(bgRects[0]);
-   win->draw(title);
-   for(int i = 0; i < 4; i++)
+   win.draw(bgImage);
+   win.draw(bgRects[0]);
+   win.draw(title);
+   for(int i = 0; i < count; i++)
    {
-      win->draw(*options[i].getText());
+      win.draw(options[i].getText());
    }
-
-   //DrawArrow();
-}
-
-void GMainMenu::DrawArrow()
-{
-   float x = 50.0f;
-   float y = float(103 + 50 * selIndex);
-   arrow.setPosition(x, y);
-   win->draw(arrow);
 }
 
 
-MenuCommand* GMainMenu::EnterSelection()
+MenuCommand GMainMenu::enterSelection()
 {
    switch(selIndex)
    {
       case 0: 
-         return new MenuCommand(MenuCommand::Function::NEW_GAME);
+         return MenuCommand(MenuCommand::Function::NEW_GAME);
       case 1:
-         return new MenuCommand(MenuCommand::Function::LOAD);
+         return MenuCommand(MenuCommand::Function::LOAD);
       case 2:
-         return NULL;
+         return MenuCommand(new KeyLayoutMenu(win, keyBinder, x, y), MenuCommand::Function::NEW_MENU);
       case 3:
-         return new MenuCommand(MenuCommand::Function::EXIT_GAME);
+         return MenuCommand(MenuCommand::Function::EXIT_GAME);
       default:
-         return NULL;
+         return MenuCommand(MenuCommand::Function::NONE);
    }
 }

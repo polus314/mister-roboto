@@ -1,31 +1,31 @@
 #include "stdafx.h"
 #include "WB_AttacksMenu.h"
 
-WB_AttacksMenu::WB_AttacksMenu(RenderWindow* w, float _x, float _y)
+WB_AttacksMenu::WB_AttacksMenu(RenderWindow &w, float _x, float _y)
    : GameMenu(w, _x, _y)
 {
-   options[count++] = GMenuItem("Buy a turret: $50", &font);
-   options[count++] = GMenuItem("Buy a flamethrower: $75", &font);
-   options[count++] = GMenuItem("Buy a sledgehammer: $40", &font);
-   options[count++] = GMenuItem("Exit", &font);
+   options[count++] = GMenuItem("Buy a turret: $50", font);
+   options[count++] = GMenuItem("Buy a flamethrower: $75", font);
+   options[count++] = GMenuItem("Buy a sledgehammer: $40", font);
+   options[count++] = GMenuItem("Exit", font);
 
    for(int i = 0; i < count; i++)
       options[i].setPosition(x + 2.5f, float(y + i * 50));
    options[0].select();
-   SetUpBackground(300.0f, 300.0f);
+   setUpBackground(300.0f, 300.0f);
 }
 
 
-void WB_AttacksMenu::Draw()
+void WB_AttacksMenu::draw()
 {
-   DrawBackground();
+   drawBackground();
    for(int i = 0; i < count; i++)
-      win->draw(*options[i].getText());
+      win.draw(options[i].getText());
 }
 
-MenuCommand* WB_AttacksMenu::EnterSelection()
+MenuCommand WB_AttacksMenu::enterSelection()
 {
-   Item* returnItem = NULL;
+   Item* returnItem;
    switch(selIndex)
    {
       case 0:
@@ -35,7 +35,7 @@ MenuCommand* WB_AttacksMenu::EnterSelection()
       case 2:
          returnItem = new Item(Item::ItemType::SLEDGEHAMMER, 1);
       case 3:
-         return new MenuCommand(MenuCommand::Function::EXIT_MENU);
+         return MenuCommand(MenuCommand::Function::EXIT_MENU);
    }
-   return new MenuCommand(returnItem, MenuCommand::Function::BUY_ITEM);
+   return MenuCommand(returnItem, MenuCommand::Function::BUY_ITEM);
 }

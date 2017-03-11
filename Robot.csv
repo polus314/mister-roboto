@@ -1,27 +1,27 @@
 Robots!,Type1,Type2,HP,Attack,Defense,Speed,Special
-Alpha,Aluminum,Fast,40,60,30,80,50
-Bravo,Cast Iron,Tough,80,70,90,35,10
-Charlie,Steel,Accurate,80,70,90,35,10
-Delta,Stainless Steel,Strong,80,70,90,35,10
-Echo,Carbon Fiber,Tech,80,70,90,35,10
-Foxtrot,Aluminum,Tech,80,70,90,35,10
-Gulf,Cast Iron,Fast,80,70,90,35,10
-Hotel,Steel,Tough,80,70,90,35,10
-India,Stainless Steel,Accurate,80,70,90,35,10
-Juliette,Carbon Fiber,Strong,80,70,90,35,10
-Kilo,Aluminum,Tech,80,70,90,35,10
-Lima,Cast Iron,Tech,80,70,90,35,10
-Mike,Steel,Tech,80,70,90,35,10
-November,Stainless Steel,Fast,80,70,90,35,10
-Oscar,Carbon Fiber,Tough,80,70,90,35,10
-Papa,Aluminum,Accurate,80,70,90,35,10
-Quebec,Cast Iron,Strong,80,70,90,35,10
-Romeo,Steel,Tech,80,70,90,35,10
-Sierra,Stainless Steel,Tech,80,70,90,35,10
-Tango,Carbon Fiber,Tech,80,70,90,35,10
-Uniform,Aluminum,Tech,80,70,90,35,10
-Victor,Cast Iron,Fast,80,70,90,35,10
-Whiskey,Steel,Tough,80,70,90,35,10
-Xray,Stainless Steel,Accurate,80,70,90,35,10
-Yankee,Carbon Fiber,Strong,80,70,90,35,10
-Zulu,Aluminum,Tech,80,70,90,35,10
+Alpha,Aluminum,Fast,40,60,30,25,5
+Bravo,Cast Iron,Tough,50,70,40,35,15
+Charlie,Steel,Accurate,60,80,50,45,25
+Delta,Stainless Steel,Strong,70,90,60,55,35
+Echo,Carbon Fiber,Tech,80,100,70,65,45
+Foxtrot,Aluminum,Tech,90,110,80,75,55
+Gulf,Cast Iron,Fast,100,120,90,85,65
+Hotel,Steel,Tough,110,130,100,95,75
+India,Stainless Steel,Accurate,120,140,110,105,85
+Juliette,Carbon Fiber,Strong,130,150,120,115,95
+Kilo,Aluminum,Tech,140,160,130,125,105
+Lima,Cast Iron,Tech,150,170,140,135,115
+Mike,Steel,Tech,160,180,150,145,125
+November,Stainless Steel,Fast,170,190,160,155,135
+Oscar,Carbon Fiber,Tough,180,200,170,165,145
+Papa,Aluminum,Accurate,190,210,180,175,155
+Quebec,Cast Iron,Strong,200,220,190,185,165
+Romeo,Steel,Tech,210,230,200,195,175
+Sierra,Stainless Steel,Tech,220,240,210,205,185
+Tango,Carbon Fiber,Tech,230,250,220,215,195
+Uniform,Aluminum,Tech,240,260,230,225,205
+Victor,Cast Iron,Fast,250,270,240,235,215
+Whiskey,Steel,Tough,260,280,250,245,225
+Xray,Stainless Steel,Accurate,270,290,260,255,235
+Yankee,Carbon Fiber,Strong,280,300,270,265,245
+Zulu,Aluminum,Tech,290,310,280,275,255

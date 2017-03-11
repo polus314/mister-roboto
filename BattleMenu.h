@@ -18,29 +18,22 @@ public:
    //--------------------------------------------------------------------------
    // Constructor
    //--------------------------------------------------------------------------
-   BattleMenu(RenderWindow*, Character*, float _x = 0.0f, float _y = 400.0f);
+   BattleMenu(RenderWindow &w, const Character&, float _x = 250.0f, float _y = MR::WIN_HEIGHT - 100.0f);
    
    //--------------------------------------------------------------------------
    // Methods inherited from GameMenu
    //--------------------------------------------------------------------------
-   void PreviousOption();  
-   void NextOption();
-   void Draw();
-   MenuCommand* EnterSelection();
+   void draw();
+   MenuCommand enterSelection();
    
    //--------------------------------------------------------------------------
    // Getter and Setters
    //--------------------------------------------------------------------------
-   void SetUserBot(Robot* up) { userPM = up; }
+   void setUserBot(const Robot& ub) { userBot = ub; }
 
-private:
-   //--------------------------------------------------------------------------
-   // Draws an "arrow" next to the option that is selected
-   //--------------------------------------------------------------------------
-   void DrawArrow();
- 
-   Character* trainer;  // george
-   Robot* userPM;       // robot that is engaged in battle
+private: 
+   const Character &trainer;  // george
+   Robot userBot;      // robot that is engaged in battle
 };
 
 

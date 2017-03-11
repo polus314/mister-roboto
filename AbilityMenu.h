@@ -3,10 +3,6 @@
 // 
 // Purpose: This file defines an AbilityMenu class. The ability menu displays
 //          all of the abilities the given robot knows.
-//
-// Created: 2/6/2016
-//
-// Changed: 2/6/2016 
 //-----------------------------------------------------------------------------
 
 #ifndef ABILITYMENU_H
@@ -18,18 +14,16 @@
 class AbilityMenu : public GameMenu
 {
 public:
-   AbilityMenu::AbilityMenu(RenderWindow* w, Robot*, float _x = 0.0f, float _y = MR::WIN_HEIGHT * 4 / 5); 
+   AbilityMenu(RenderWindow &w, const Robot&, float _x = 0.0f, float _y = MR::WIN_HEIGHT - 100.0f); 
 
-   void Draw();
-   void NextOption();
-   void PreviousOption();
-   MenuCommand* EnterSelection();
-   void SetUserBot(Robot* ur) { userBot = ur; }
+   void draw();
+   void nextOption();
+   void previousOption();
+   MenuCommand enterSelection();
+   void setUserBot(Robot ur) { userBot = ur; }
 
 private:
-   Robot* userBot;
-
-   void DrawArrow();
+   Robot userBot;
 };
 
 

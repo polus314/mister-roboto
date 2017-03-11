@@ -12,7 +12,7 @@
 class Ability
 {
 public:
-   static const int saveChars = 8;
+   static const int SAVE_CHARS = 8;
    //--------------------------------------------------------------------------
    // Enumerates the different types that a robot can have:
    //    First: the type of metal they are made of
@@ -28,6 +28,11 @@ public:
    static string SaveTypeToStr(Type t);
 
    //--------------------------------------------------------------------------
+   // Returns a lengthier string representation of the given type
+   //--------------------------------------------------------------------------
+   static string TypeToString(Type t);
+
+   //--------------------------------------------------------------------------
    // Enumerates the different effects that an ability can have when used in a
    // battle. Main types are: Damage, Buff, Status Affliction, and Heal
    //--------------------------------------------------------------------------
@@ -39,29 +44,29 @@ public:
    // Constructors
    //--------------------------------------------------------------------------
    Ability();
-   Ability(string, int);
-   Ability(string, Effect, int, Effect, int, Ability::Type);
+   Ability(const string& _name, int strength);
+   Ability(const string& _name, Effect eff1, int str1, Effect eff2, int str2, Ability::Type t);
 
    //--------------------------------------------------------------------------
    // Used to load data and update this Ability from saved data
    //--------------------------------------------------------------------------
-   void LoadFromSaveData(const string& info);
+   void loadFromSaveData(const string& info);
 
    //--------------------------------------------------------------------------
    // Getters
    //--------------------------------------------------------------------------
-   string getName() { return name; }
-   int getStrength1() { return strength1; }
-   int getStrength2() { return strength2; }
-   Type getType() { return type; }
-   Effect getEffect1() { return effect1; }
-   Effect getEffect2() { return effect2; }
+   string getName() const { return name; }
+   int getStrength1() const { return strength1; }
+   int getStrength2() const { return strength2; }
+   Type getType() const { return type; }
+   Effect getEffect1() const { return effect1; }
+   Effect getEffect2() const { return effect2; }
 
    //--------------------------------------------------------------------------
    // Returns true if ability has a secondary effect (e.g. Damage AND chance to 
    // Poison)
    //--------------------------------------------------------------------------
-   bool hasSecondEffect() { return effect2 != Effect::NONE; }
+   bool hasSecondEffect() const { return effect2 != Effect::NONE; }
 
    //--------------------------------------------------------------------------
    // Returns the corresponding Ability::Type for the given string
@@ -71,7 +76,11 @@ public:
    //--------------------------------------------------------------------------
    // Returns a string with all the info needed to load this ability later
    //--------------------------------------------------------------------------
-   string GetSaveData() const;
+   string getSaveData() const;
+
+   bool operator==(const Ability& rhs) const;
+
+   bool operator!=(const Ability& rhs) const;
 
 private:
    //--------------------------------------------------------------------------

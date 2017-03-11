@@ -16,13 +16,13 @@ public:
    enum class SpaceType { GRASS, DIRT, GRAVEL };
    Space() {}
    Space(SpaceType t);
-   SpaceType GetType() const { return type; }
+   SpaceType getType() const { return type; }
    bool isSolid() const { return solid;}
    bool isDangerous() const { return dangerous; }
    bool hasPickUp() const { return pickUp != Item(); }
-   void placePickUp(Item& item);
+   void placePickUp(const Item& item);
    bool removePickUp();
-   const Item& getItem() const;
+   Item getItem() const;
 
 private:
    bool dangerous, solid;

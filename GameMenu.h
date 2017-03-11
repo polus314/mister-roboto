@@ -19,15 +19,15 @@ class GameMenu
 public:
    enum class Layout { L_TO_R, TOP_TO_BOT };
    GameMenu();
-   GameMenu(RenderWindow* w, float _x, float _y);
-   virtual void Draw() = 0;
-   virtual void NextOption();
-   virtual void PreviousOption();
-   virtual MenuCommand* EnterSelection() = 0;
+   GameMenu(RenderWindow &w, float _x, float _y);
+   virtual void draw() = 0;
+   virtual void nextOption();
+   virtual void previousOption();
+   virtual MenuCommand enterSelection() = 0;
    Layout getLayout() { return layout; }
 
 protected:
-   RenderWindow* win;
+   RenderWindow &win;
    Font font;
    int selIndex, count;
    float x, y; // x is left edge, y is top edge
@@ -36,8 +36,8 @@ protected:
    Text title;
    Layout layout;
 
-   virtual void SetUpBackground(float width, float height);
-   virtual void DrawBackground();
+   virtual void setUpBackground(float width, float height);
+   virtual void drawBackground();
 };
 
 #endif

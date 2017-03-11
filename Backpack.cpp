@@ -1,34 +1,25 @@
 #include "stdafx.h"
 #include "Backpack.h"
 
-
-Backpack::Backpack()
+bool Backpack::addItems(const Item& item)
 {
-}
-
-
-Backpack::~Backpack()
-{
-}
-
-bool Backpack::AddItems(Item& newItem)
-{
-   if(items.size() > MAX_ITEM_SLOTS || newItem.GetNum() <= 0)
+   Item newItem = item;
+   if(items.size() > MAX_ITEM_SLOTS || newItem.getNum() <= 0)
       return false;
    vector<Item>::iterator iter = items.begin(),
                               end = items.end();
    for( ; iter != end; iter++)
    {
-      if(iter->GetType() == newItem.GetType() && iter->GetNum() < MAX_STACK) // if right item and stack isn't full
+      if(iter->getType() == newItem.getType() && iter->getNum() < MAX_STACK) // if right item and stack isn't full
       {
-         if(iter->GetNum() + newItem.GetNum() > MAX_STACK) // if all new items can't fit without overfilling stack
+         if(iter->getNum() + newItem.getNum() > MAX_STACK) // if all new items can't fit without overfilling stack
          {
-            newItem.SetNum(newItem.GetNum() - (MAX_STACK - iter->GetNum()) ); // subtract to get overflow
-            iter->SetNum(MAX_STACK);
+            newItem.setNum(newItem.getNum() - (MAX_STACK - iter->getNum()) ); // subtract to get overflow
+            iter->setNum(MAX_STACK);
          }
          else
          {
-            iter->SetNum(iter->GetNum() + newItem.GetNum());
+            iter->setNum(iter->getNum() + newItem.getNum());
             return true;
          }
       }
@@ -40,10 +31,11 @@ bool Backpack::AddItems(Item& newItem)
    return true;
 }
 
-bool Backpack::RemoveItems(Item& item)
+bool Backpack::removeItems(const Item& remItem)
 {
+   Item item = remItem;
    bool status = false;
-   if(items.size() == 0 || item.GetNum() <= 0)
+   if(items.size() == 0 || item.getNum() <= 0)
       return status;
    vector<Item>::iterator iter = items.begin(),
                               end = items.end();
@@ -51,14 +43,14 @@ bool Backpack::RemoveItems(Item& item)
    {
       if(*iter == item)
       {
-         if(iter->GetNum() > item.GetNum())
+         if(iter->getNum() > item.getNum())
          {
-            iter->SetNum(iter->GetNum() - item.GetNum());
+            iter->setNum(iter->getNum() - item.getNum());
             return true;
          }
-         else if(iter->GetNum() < item.GetNum())
+         else if(iter->getNum() < item.getNum())
          {   
-            item.SetNum(item.GetNum() - iter->GetNum());
+            item.setNum(item.getNum() - iter->getNum());
             items.erase(iter);
             status = true;
          }
@@ -72,7 +64,7 @@ bool Backpack::RemoveItems(Item& item)
    return status;
 }
 
-bool Backpack::RemoveItems(int index, int num)
+bool Backpack::removeItems(int index, int num)
 {
    if(items.size() == 0 || num <= 0)
       return false;
@@ -83,8 +75,8 @@ bool Backpack::RemoveItems(int index, int num)
       iter++;
    if(i != index)
       return false; // hit the end of the vector
-   if(iter->GetNum() > num)
-      iter->SetNum(iter->GetNum() - num);
+   if(iter->getNum() > num)
+      iter->setNum(iter->getNum() - num);
    else
       items.erase(iter);
    return true;
@@ -92,7 +84,7 @@ bool Backpack::RemoveItems(int index, int num)
 
 
 
-Item& Backpack::at(int index)
+Item Backpack::at(int index) const
 {
    if(index < int(items.size()))
       return items.at(index);
@@ -100,12 +92,12 @@ Item& Backpack::at(int index)
       return items.back();
 }
 
-int Backpack::countAt(int index)
+int Backpack::countAt(int index) const
 {
    if(index < int(items.size()))
-      return items.at(index).GetNum();
+      return items.at(index).getNum();
    else
-      return items.back().GetNum();
+      return items.back().getNum();
 }
 
 

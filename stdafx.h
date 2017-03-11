@@ -10,10 +10,3 @@
 #include <SFML/Audio.hpp>
 using namespace std;
 using namespace sf;
-
-
-namespace MR
-{
-   const float WIN_HEIGHT = 500.0f;
-   const float WIN_WIDTH = 500.0f;
-}

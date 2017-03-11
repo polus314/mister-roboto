@@ -2,47 +2,90 @@
 #include "GameController.h"
 
 GameController::GameController()
+   : battle(Robot(), Robot())
 {
    inTrainerBattle = inWildBattle = false;
-   map.placePickUp(Item(Item::ItemType::POTION, 1), 8, 8);
-   map.placePickUp(Item(Item::ItemType::WORKBENCH, 1), 6, 10);
 }
 
 
-bool GameController::LoadWorld(int num)
+bool GameController::saveWorld(int num) const
 {
+   string fileName = "SaveFile" + to_string(num) + ".txt";
+   ofstream saveFile(fileName);
+   // save all items in the world, not in george's inventory
+   string items = getListOfItems();
+   saveFile << items;
+   saveFile << george.getSaveData();
+   return true;
+}
+
+
+bool GameController::loadWorld(int num)
+{
+   bool success = true;
    string fileName = "SaveFile";
    fileName.append(to_string(num));
    fileName.append(".txt");
    ifstream inFile(fileName);
 
-   int ic, bc, charsNeeded;
-   char * buffer = new char[128];
-   inFile.read(buffer, 8);
-   string attribute(buffer);
+   int ic, bc, totalLength;
+   inFile.seekg(0, inFile.end);
+   totalLength = int(inFile.tellg());
+   inFile.seekg(0, inFile.beg);
+   char *buffer = new char[totalLength];
+   char *ptr = buffer;
+   inFile.read(buffer, totalLength);
+   int itemsInMap = stoi(string(buffer, 4));
+   buffer += 4;
+   int x, y;
+   Item tempItem;
+   for(int i = 0; i < itemsInMap; i++)
+   {
+      x = stoi(string(buffer, 4));
+      buffer += 4;
+      y = stoi(string(buffer, 4));
+      buffer += 4;
+      tempItem.loadFromSaveData(string(buffer, Item::SAVE_CHARS));
+      buffer += Item::SAVE_CHARS;
+      placeItem(tempItem, x, y);
+   }
+   
+   string attribute(buffer, 8);
    ic = stoi(attribute.substr(0, 4));
    bc = stoi(attribute.substr(4, 4));
-   charsNeeded = Character::baseSaveChars - 8 + ic * Item::saveChars + bc * Robot::saveChars;
-   if(charsNeeded > 128)               // - 8 because ic and bc were already read in
-   {
-      delete buffer;
-      buffer = new char[charsNeeded];
-   }
-   inFile.seekg(ios::beg);
-   inFile.read(buffer, charsNeeded);
    attribute = string(buffer);
-   george.LoadFromSaveData(attribute);
+   if(!george.loadFromSaveData(attribute))
+      success = false;
 
-   delete buffer;
-   return true;
+   
+   delete [] ptr;
+   return success;
 }
 
-Character* GameController::GetMainCharacter()
+string GameController::getListOfItems() const
 {
-   return &george;
+   string list;
+   int size = 0;
+   for(int i = 0; i < GameMap::MAX_WIDTH; i++)
+      for(int j = 0; j < GameMap::MAX_HEIGHT; j++)
+         if(map.hasPickUp(i,j))
+         {
+            size++;
+            list.append(SaveIntToStr(i));
+            list.append(SaveIntToStr(j));
+            list.append(map.getItem(i,j).getSaveData());
+         }
+   list.insert(0, SaveIntToStr(size));
+   return list;
 }
 
-bool GameController::Walk(Character::Direction d)
+
+Character GameController::getMainCharacter()
+{
+   return george;
+}
+
+bool GameController::walk(Character::Direction d)
 {
    switch(d)
    {
@@ -90,26 +133,25 @@ void GameController::checkForBattle()
    {
       if(rand() % 100 > 60)
       {
-         inWildBattle = true;
          enemy = Robot(Robot::ID::CHARLIE);
-         StartWildBattle(enemy);
+         startWildBattle(enemy);
       }
    }
    // TODO - Check for Trainer Battles
 }
 
-void GameController::StartWildBattle(Robot& r)
+void GameController::startWildBattle(Robot& r)
 {
-   battle = Battle(george.getRobot(0), &r);
-   // TODO - implement this
+   battle = Battle(george.getRobot(0), r);
+   inWildBattle = true;
 }
 
-Robot* GameController::getEnemy()
+Robot GameController::getEnemy()
 {
    if(inABattle()) 
-      return battle.GetOtherBot();
+      return battle.getOtherBot();
    else
-      return NULL;
+      return Robot();
 }
 
 bool GameController::tryToRun()
@@ -119,13 +161,13 @@ bool GameController::tryToRun()
    else if(inWildBattle)
    {
       inWildBattle = false;
-      return true; // TODO - add random element
+      return true;
    }
    else
       return false;
 }
 
-const Item* GameController::Interact()
+Item GameController::interact()
 {
    int x = george.getX();
    int y = george.getY();
@@ -136,20 +178,18 @@ const Item* GameController::Interact()
       case Character::Direction::LEFT : x--; break;
       case Character::Direction::RIGHT : x++; break;
    }
-   if(map.getItem(x, y).GetType() == Item::ItemType::WORKBENCH)
+   if(map.getItem(x, y).getType() == Item::ItemType::WORKBENCH)
    {
-      return new Item(map.getItem(x, y));
+      return map.getItem(x, y);
    }
    else
    {
-      return PickUpItem();
+      return pickUpItem();
    }
-
-
 }
 
 
-const Item* GameController::PickUpItem()
+Item GameController::pickUpItem()
 {
    int x = george.getX();
    int y = george.getY();
@@ -163,23 +203,61 @@ const Item* GameController::PickUpItem()
    if(map.hasPickUp(x, y))
    {
       Item pickup = map.getItem(x, y);
-      bool success = george.AcquireItem(pickup);
+      bool success = george.acquireItem(pickup);
       if(!success)
-         return NULL;
+         return Item();
       map.removePickUp(x, y);
 
       Item::ItemType type = Item::ItemType(rand() % 3);
       map.placePickUp(Item(type, rand() % 99), 10, 10); //(rand() % 10)+ 5, (rand() % 10) + 5);
-      return new Item(pickup);
+      return pickup;
    }
    else
    {
-      return NULL;
+      return Item();
    }
 }
 
-void GameController::UseAbility(Ability move)
+bool GameController::useAbility(const Ability& move)
 {
-   battle.DoTurnEvents(&move);
+   Battle::State state = battle.doTurnEvents(move);
+   switch(state)
+   {
+      case Battle::State::CONTINUE : 
+         // TODO
+         return true;
+      default :
+         inTrainerBattle = inWildBattle = false;
+         return state == Battle::State::CONTINUE;
+   }
 }
 
+bool GameController::repairBot(const Item& item, int index)
+{
+   Robot robot = george.getRobot(index);
+   if(robot == Robot())
+      return false;
+  if(item.getType() != Item::ItemType::POTION)
+      return false;
+ 
+   robot.heal(item.getStrength());
+   return true;  
+}
+
+bool GameController::placeItem(const Item& item, int x, int y)
+{
+   if(map.hasPickUp(x,y))
+      return false;
+   map.placePickUp(item, x, y);
+   return true;
+}
+
+bool GameController::rearrangeRobots(int first, int second)
+{
+   return george.swapRobots(first, second);
+}
+
+void GameController::repairAllRobotsFully()
+{
+   george.repairAllRobots();
+}
